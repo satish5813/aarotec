@@ -103,7 +103,7 @@ export default function Hero() {
           >
             Welcome Home,
             <br />
-            <span className="text-glow">smarter than ever.</span>
+            <span className="text-glow">Smarter Than Ever.</span>
           </motion.h1>
 
           <motion.p

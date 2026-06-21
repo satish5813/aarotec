@@ -6,29 +6,49 @@ import AnimatedHeading from "./AnimatedHeading";
 
 const QUOTES = [
   {
-    q: "The panels look like art on the wall and the app just works. Our whole family adapted in a day.",
-    n: "Ananya R.",
-    r: "3 BHK · Bengaluru",
-  },
-  {
     q: "Retrofitting was painless — no rewiring, no mess. The goodnight scene alone is worth it.",
     n: "Vikram S.",
-    r: "Villa · Surat",
+    r: "Villa · Visakhapatnam",
   },
   {
     q: "Energy insights helped us cut our monthly bill noticeably. Support has been excellent.",
     n: "Meera & Arjun",
-    r: "Apartment · Mumbai",
+    r: "Apartment · Khammam",
+  },
+  {
+    q: "We automated the common areas across the block — lighting and security run themselves now.",
+    n: "Lakshmi P.",
+    r: "Gated community · Vijayawada",
   },
   {
     q: "Even when the Wi-Fi drops, the switches keep working. That reliability sold me.",
-    n: "Rohan T.",
-    r: "Duplex · Pune",
+    n: "Suresh K.",
+    r: "Individual house · Ongole",
   },
   {
-    q: "We control four rooms from one master panel. Guests always ask where we got it.",
-    n: "Fatima K.",
-    r: "Penthouse · Dubai",
+    q: "Installed room by room over a weekend. The touch panels look stunning on the wall.",
+    n: "Divya R.",
+    r: "Apartment · Chilakaluripet (AP)",
+  },
+  {
+    q: "Controlling fans, lights and the AC from one panel is so convenient. The whole family loves it.",
+    n: "Naveen M.",
+    r: "Apartment · Kakinada",
+  },
+  {
+    q: "Both floors on a single app. Scenes for movie night and mornings are a game changer.",
+    n: "Harika S.",
+    r: "Duplex · Guntur",
+  },
+  {
+    q: "Scheduling lights and ACs across the office cut our power costs significantly.",
+    n: "Sai Teja",
+    r: "Commercial office · Vijayawada",
+  },
+  {
+    q: "Ambience presets for day and evening transformed the space. Setup was effortless.",
+    n: "Coastal Brew Café",
+    r: "Cafeteria · Visakhapatnam",
   },
 ];
 

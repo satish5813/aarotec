@@ -1,8 +1,10 @@
 import { NextRequest } from "next/server";
+import { insertLead } from "@/lib/db";
 
-// Receives a lead from the contact form and forwards it to the Google Sheet
-// webhook (a Google Apps Script Web App). Set LEADS_WEBHOOK_URL in your
-// environment to the deployed Apps Script URL — see LEADS_SETUP.md.
+// Receives a lead from the contact form and saves it to the local SQLite
+// database (src/lib/db.ts). Saved leads are viewable in the admin dashboard
+// at /admin. Optionally, if LEADS_WEBHOOK_URL is set, each lead is ALSO
+// forwarded to a Google Sheet — see LEADS_SETUP.md.
 
 export const runtime = "nodejs";
 
@@ -48,20 +50,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const webhook = process.env.LEADS_WEBHOOK_URL;
-  if (!webhook) {
-    // Fail loudly rather than show a false "thank you" while silently losing
-    // the lead. Configure LEADS_WEBHOOK_URL to enable delivery.
-    console.error(
-      "[lead] LEADS_WEBHOOK_URL is not set — lead NOT saved:",
-      { name, email, phone, city }
-    );
-    return Response.json(
-      { ok: false, error: "Lead capture is not configured yet." },
-      { status: 503 }
-    );
-  }
-
   const lead = {
     name,
     email,
@@ -69,26 +57,39 @@ export async function POST(request: NextRequest) {
     city,
     source: request.headers.get("referer") || "website",
     userAgent: request.headers.get("user-agent") || "",
-    // Timestamp is added on the Sheet side so we don't depend on server clock.
   };
 
+  // 1) Save to SQLite — this is the primary store behind the /admin dashboard.
   try {
-    const res = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(lead),
-      // Apps Script can be slow on cold start; give it room.
-      signal: AbortSignal.timeout(10_000),
-    });
-    if (!res.ok) {
-      throw new Error(`Webhook responded ${res.status}`);
-    }
+    insertLead(lead);
   } catch (err) {
-    console.error("[lead] failed to forward to sheet:", err, { name, email, phone });
+    console.error("[lead] failed to save to SQLite:", err, { name, email, phone });
     return Response.json(
       { ok: false, error: "Could not submit right now. Please try again or call us." },
-      { status: 502 }
+      { status: 500 }
     );
+  }
+
+  // 2) Optionally forward to a Google Sheet as well, if configured. A webhook
+  //    failure here must NOT lose the lead — it's already saved above — so we
+  //    only log and still return success.
+  const webhook = process.env.LEADS_WEBHOOK_URL;
+  if (webhook) {
+    try {
+      const res = await fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lead),
+        // Apps Script can be slow on cold start; give it room.
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!res.ok) throw new Error(`Webhook responded ${res.status}`);
+    } catch (err) {
+      console.error("[lead] saved locally but failed to forward to sheet:", err, {
+        name,
+        email,
+      });
+    }
   }
 
   return Response.json({ ok: true });

@@ -17,6 +17,16 @@ const INSTALLS = [
   { src: "/lock-fit.jpeg", caption: "Professional installation" },
   { src: "/lock-strike.jpeg", caption: "Precision strike plate" },
   { src: "/lock-onsite.jpeg", caption: "On-site fitting by our team" },
+  { src: "/locs/install-2.jpeg", caption: "Entryway panel by the front door" },
+  { src: "/locs/install-7.jpeg", caption: "One-touch scene controls" },
+  { src: "/locs/install-10.jpeg", caption: "Living room dual-panel setup" },
+  { src: "/locs/install-3.jpeg", caption: "8-scene glass touch panel" },
+  { src: "/locs/install-4.jpeg", caption: "Bedside touch panel" },
+  { src: "/locs/install-6.jpeg", caption: "Seven-way touch switchboard" },
+  { src: "/locs/install-9.jpeg", caption: "Light & fan control panel" },
+  { src: "/locs/install-8.jpeg", caption: "Switches & sockets in one glass" },
+  { src: "/locs/install-1.jpeg", caption: "Smart socket with built-in USB" },
+  { src: "/locs/install-5.jpeg", caption: "Panels in every room" },
 ] as const;
 
 const QUOTES = [

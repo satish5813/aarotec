@@ -214,7 +214,7 @@ export const PRODUCTS: Product[] = [
     ],
     specs: [
       { k: "Access", v: "Fingerprint, PIN, RFID, key, app" },
-      { k: "Power", v: "Rechargeable battery" },
+      { k: "Power", v: "Battery + emergency power port" },
       { k: "Alerts", v: "Real-time app notifications" },
       { k: "Material", v: "Hardened alloy body" },
       { k: "Warranty", v: "2 years" },

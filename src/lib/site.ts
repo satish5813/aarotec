@@ -7,11 +7,11 @@ export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
 
 export const BUSINESS = {
-  name: "Aarotech",
-  legalName: "Aarotech",
+  name: "Aaro Tec",
+  legalName: "Aaro Tec",
   tagline: "Transforming spaces and enhancing lives",
   description:
-    "Aarotech designs intelligent touch panels and a connected home ecosystem. Control lights, fans, curtains and climate with a single, beautiful interface.",
+    "Aaro Tec designs intelligent touch panels and a connected home ecosystem. Control lights, fans, curtains and climate with a single, beautiful interface.",
   phone: "+91 83090 47843",
   phoneHref: "+918309047843",
   contactPerson: "Pradeep",

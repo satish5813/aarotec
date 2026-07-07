@@ -66,7 +66,7 @@ export default function Contact() {
               Your contact · Pradeep
             </p>
             <h2 className="font-display mt-3 text-4xl font-bold sm:text-5xl">
-              Bring Aarotech home
+              Bring Aaro Tec home
             </h2>
             <p className="mt-5 max-w-sm text-muted">
               Tell us about your space and a specialist will design a

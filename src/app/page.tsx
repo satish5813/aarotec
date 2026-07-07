@@ -11,7 +11,7 @@ import Scenes from "@/components/Scenes";
 import AppShowcase from "@/components/AppShowcase";
 import Stats from "@/components/Stats";
 import Why from "@/components/Why";
-import Testimonials from "@/components/Testimonials";
+import Gallery from "@/components/Gallery";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -32,7 +32,7 @@ export default function Home() {
       <AppShowcase />
       <Stats />
       <Why />
-      <Testimonials />
+      <Gallery />
       <FAQ />
       <Contact />
       <Footer />

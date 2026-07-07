@@ -12,7 +12,7 @@ const ITEMS = [
   },
   {
     q: "Will it keep working if the internet goes down?",
-    a: "Yes. Devices form a local mesh and respond to touch and automations entirely offline. Cloud and the app simply add remote access on top.",
+    a: "Yes. It will keep working with the IR remote and touch controls, so you can operate everything as usual even without internet. The app simply adds remote access back once you're online.",
   },
   {
     q: "Which voice assistants are supported?",

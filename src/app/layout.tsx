@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "touch panel",
     "home automation",
     "smart switches India",
-    "Aarotech",
+    "Aaro Tec",
   ],
   alternates: {
     canonical: "/",

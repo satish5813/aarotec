@@ -7,7 +7,7 @@ import AnimatedHeading from "./AnimatedHeading";
 const CONTROLS = [
   { title: "Lighting", desc: "Dim, tune and schedule every fixture or scene." },
   { title: "Fans & air", desc: "Speed control and airflow that adapts to the room." },
-  { title: "Curtains & blinds", desc: "Open to the morning, close at sunset — automatically." },
+  { title: "Curtains", desc: "Open to the morning, close at sunset — automatically." },
   { title: "Climate", desc: "AC and thermostats tuned to presence and weather." },
   { title: "Security", desc: "Locks, cameras and alerts in one secure timeline." },
   { title: "Energy", desc: "Live usage insights that quietly trim your bill." },
@@ -34,7 +34,7 @@ export default function Ecosystem() {
           />
           <Reveal delay={0.1}>
             <p className="mt-4 text-muted">
-              Aarotech devices form a self-healing mesh that keeps
+              Aaro Tec devices form a self-healing mesh that keeps
               working even when the internet doesn&apos;t. Set a scene once and
               your whole home responds.
             </p>

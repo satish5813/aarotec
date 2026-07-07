@@ -110,7 +110,7 @@ export default function Hero() {
             {...fade(0.16)}
             className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted sm:mt-7 sm:text-lg lg:mx-0"
           >
-            At Aarotech, we transform ordinary spaces into intelligent living
+            At Aaro Tec, we transform ordinary spaces into intelligent living
             environments with smart automation solutions tailored to your needs
             — without rewiring and without complexity.
           </motion.p>
@@ -150,16 +150,25 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          <motion.p
+          <motion.div
             {...fade(0.27)}
-            className="mt-6 flex flex-col items-center gap-x-2 gap-y-1 text-sm text-muted sm:flex-row sm:flex-wrap lg:justify-start"
+            className="mt-7 flex justify-center lg:justify-start"
           >
-            <span>Transform your home with Aarotech smart solutions</span>
-            <span className="hidden h-3 w-px bg-line sm:inline-block" />
-            <span className="font-semibold text-glow">
-              Starting at ₹39,999
-            </span>
-          </motion.p>
+            <div className="glass card-shadow inline-flex flex-col items-center gap-x-5 gap-y-1.5 rounded-2xl px-6 py-4 sm:flex-row">
+              <span className="text-sm text-muted">
+                Transform your home with Aaro Tec smart solutions
+              </span>
+              <span className="hidden h-8 w-px bg-line sm:block" />
+              <span className="flex items-baseline gap-2 whitespace-nowrap">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                  Starting at
+                </span>
+                <span className="font-display text-3xl font-bold leading-none text-glow sm:text-4xl">
+                  ₹39,999
+                </span>
+              </span>
+            </div>
+          </motion.div>
 
           <motion.div
             {...fade(0.3)}
@@ -283,7 +292,7 @@ export default function Hero() {
           >
             <Image
               src="/hero_bg.png"
-              alt="Aarotech smart-home product family — touch panels, hub, smart lock, sensors and the companion app"
+              alt="Aaro Tec smart-home product family — touch panels, hub, smart lock, sensors and the companion app"
               fill
               priority
               sizes="(max-width: 1024px) 92vw, 50vw"

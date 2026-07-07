@@ -84,3 +84,60 @@ export function CameraIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function FingerprintIcon({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <path d="M7 19.2c-1.3-1.7-2-3.9-2-6.2a7 7 0 0 1 14 0c0 1.2-.1 2.4-.4 3.5" />
+      <path d="M12 9.5a3.5 3.5 0 0 1 3.5 3.5c0 2.2.3 4.3 1 6.3" />
+      <path d="M8.5 13a3.5 3.5 0 0 1 1.1-2.5M12 13c0 2.9-.7 5.6-2 8" />
+      <path d="M12 2.5c1.2 0 2.4.2 3.5.6" />
+    </svg>
+  );
+}
+
+export function KeypadIcon({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <rect x="5" y="2.5" width="14" height="19" rx="2.5" />
+      <path d="M9 7h.01M12 7h.01M15 7h.01M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01M12 18.5h.01" />
+    </svg>
+  );
+}
+
+export function CardIcon({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2.5" />
+      <path d="M6.5 12.5c1.2 0 2-.8 2-2s-.8-2-2-2M11 15.5h6.5M14 9.5h3.5" />
+    </svg>
+  );
+}
+
+export function KeyIcon({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <circle cx="8" cy="16" r="4" />
+      <path d="m10.8 13.2 9.7-9.7M17 7l3 3M14 10l2 2" />
+    </svg>
+  );
+}
+
+export function PhoneIcon({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
+      <path d="M11 18.5h2" />
+    </svg>
+  );
+}
+
+export function ShieldIcon({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <path d="M12 2.5 4.5 5.7v5.1c0 4.5 3.2 8.2 7.5 9.2 4.3-1 7.5-4.7 7.5-9.2V5.7L12 2.5Z" />
+      <circle cx="12" cy="10.5" r="2" />
+      <path d="M12 12.5v3" />
+    </svg>
+  );
+}

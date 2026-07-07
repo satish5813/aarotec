@@ -38,7 +38,7 @@ export default function Footer() {
             <div className="flex items-center gap-2.5">
               <LogoMark className="h-8 w-8 rounded-lg" />
               <span className="font-display text-lg font-bold">
-                Aarotech
+                Aaro Tec
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm text-muted">
@@ -90,7 +90,7 @@ export default function Footer() {
 
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-line pt-8 text-xs text-muted sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} Aarotech. All rights
+            © {new Date().getFullYear()} Aaro Tec. All rights
             reserved.
           </p>
           <div className="flex gap-6">

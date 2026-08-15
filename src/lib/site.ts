@@ -21,4 +21,6 @@ export const BUSINESS = {
   // A representative image used for social-share previews.
   ogImage:
     "https://whitelion-assets.blr1.cdn.digitaloceanspaces.com/website/home/products/AirGlassBlack.png",
+  // Official brand logo (full lockup) — used for JSON-LD Organization data.
+  logo: `${SITE_URL}/newaarotec.jpeg`,
 } as const;

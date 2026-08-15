@@ -76,7 +76,7 @@ const orgJsonLd = {
   legalName: BUSINESS.legalName,
   url: SITE_URL,
   description: BUSINESS.description,
-  logo: BUSINESS.ogImage,
+  logo: BUSINESS.logo,
   telephone: BUSINESS.phone,
   address: {
     "@type": "PostalAddress",

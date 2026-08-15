@@ -1,4 +1,4 @@
-import LogoMark from "./Logo";
+import Image from "next/image";
 
 const COLS = [
   { h: "Products", links: ["Posh", "Quartz", "AirTouch", "AirGlass", "AirLock"] },
@@ -35,12 +35,13 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <div className="flex items-center gap-2.5">
-              <LogoMark className="h-8 w-8 rounded-lg" />
-              <span className="font-display text-lg font-bold">
-                Aaro Tec
-              </span>
-            </div>
+            <Image
+              src="/aaro-lockup.png"
+              alt="Aaro Tec — Smart Homes That Feel Effortless"
+              width={785}
+              height={561}
+              className="h-auto w-44"
+            />
             <p className="mt-4 max-w-xs text-sm text-muted">
               Transforming spaces and enhancing lives — intelligent automation
               for the modern home.

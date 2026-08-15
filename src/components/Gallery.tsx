@@ -14,28 +14,26 @@ type Shot = {
   src: string;
   caption: string;
   cat: Exclude<Category, "all">;
-  w: number;
-  h: number;
 };
 
 const SHOTS: Shot[] = [
-  { src: "/products/mocha-room.jpg", caption: "Mocha panel in a wood-panelled living room", cat: "interiors", w: 1600, h: 1067 },
-  { src: "/gallery/panel-icons.jpg", caption: "One-touch scene controls", cat: "panels", w: 1200, h: 1600 },
-  { src: "/products/mocha-lamp.jpg", caption: "Warm corners, smarter switches", cat: "interiors", w: 1200, h: 1800 },
-  { src: "/gallery/lock-keypad.jpg", caption: "Fingerprint, PIN & RFID access", cat: "locks", w: 720, h: 1280 },
-  { src: "/gallery/panel-plant.jpg", caption: "Living room dual-panel setup", cat: "panels", w: 1200, h: 1600 },
-  { src: "/products/mocha-touch.jpg", caption: "One touch on the Mocha panel", cat: "interiors", w: 1200, h: 1200 },
-  { src: "/gallery/panel-wood.jpg", caption: "Switches & sockets in one glass", cat: "panels", w: 1200, h: 900 },
-  { src: "/gallery/lock-handle.jpg", caption: "Premium matte-black lever", cat: "locks", w: 1200, h: 1600 },
-  { src: "/products/mocha-wood.jpg", caption: "Flush fit in fluted wood", cat: "interiors", w: 1200, h: 1600 },
-  { src: "/gallery/panel-8scene.jpg", caption: "8-scene glass touch panel", cat: "panels", w: 1200, h: 900 },
-  { src: "/gallery/lock-display.jpg", caption: "Smart display, one-touch open", cat: "locks", w: 720, h: 1280 },
-  { src: "/gallery/panel-7way.jpg", caption: "Seven-way touch switchboard", cat: "panels", w: 1200, h: 675 },
-  { src: "/products/mocha-shelf.jpg", caption: "Design that disappears into the decor", cat: "interiors", w: 1200, h: 1800 },
-  { src: "/gallery/panel-socket.jpg", caption: "Smart socket with built-in USB", cat: "panels", w: 1200, h: 900 },
-  { src: "/gallery/lock-installed.jpg", caption: "Seamless on-door fit", cat: "locks", w: 1200, h: 1600 },
-  { src: "/gallery/panel-bedside.jpg", caption: "Bedside touch panel", cat: "panels", w: 1061, h: 533 },
-  { src: "/gallery/panel-fan.jpg", caption: "Light & fan control panel", cat: "panels", w: 1200, h: 675 },
+  { src: "/products/mocha-room.jpg", caption: "Mocha panel in a wood-panelled living room", cat: "interiors" },
+  { src: "/gallery/panel-icons.jpg", caption: "One-touch scene controls", cat: "panels" },
+  { src: "/products/mocha-lamp.jpg", caption: "Warm corners, smarter switches", cat: "interiors" },
+  { src: "/gallery/lock-keypad.jpg", caption: "Fingerprint, PIN & RFID access", cat: "locks" },
+  { src: "/gallery/panel-plant.jpg", caption: "Living room dual-panel setup", cat: "panels" },
+  { src: "/products/mocha-touch.jpg", caption: "One touch on the Mocha panel", cat: "interiors" },
+  { src: "/gallery/panel-wood.jpg", caption: "Switches & sockets in one glass", cat: "panels" },
+  { src: "/gallery/lock-handle.jpg", caption: "Premium matte-black lever", cat: "locks" },
+  { src: "/products/mocha-wood.jpg", caption: "Flush fit in fluted wood", cat: "interiors" },
+  { src: "/gallery/panel-8scene.jpg", caption: "8-scene glass touch panel", cat: "panels" },
+  { src: "/gallery/lock-display.jpg", caption: "Smart display, one-touch open", cat: "locks" },
+  { src: "/gallery/panel-7way.jpg", caption: "Seven-way touch switchboard", cat: "panels" },
+  { src: "/products/mocha-shelf.jpg", caption: "Design that disappears into the decor", cat: "interiors" },
+  { src: "/gallery/panel-socket.jpg", caption: "Smart socket with built-in USB", cat: "panels" },
+  { src: "/gallery/lock-installed.jpg", caption: "Seamless on-door fit", cat: "locks" },
+  { src: "/gallery/panel-bedside.jpg", caption: "Bedside touch panel", cat: "panels" },
+  { src: "/gallery/panel-fan.jpg", caption: "Light & fan control panel", cat: "panels" },
 ];
 
 const FILTERS: { key: Category; label: string }[] = [
@@ -66,45 +64,43 @@ const QUOTES = [
 
 export default function Gallery() {
   const [cat, setCat] = useState<Category>("all");
-  const [expanded, setExpanded] = useState(0);
+  const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [active, setActive] = useState<number | null>(null);
   const row = [...QUOTES, ...QUOTES];
 
-  // Accordion works best with a handful of strips — show the best 7.
   const shots = useMemo(
-    () =>
-      (cat === "all" ? SHOTS : SHOTS.filter((s) => s.cat === cat)).slice(0, 7),
+    () => (cat === "all" ? SHOTS : SHOTS.filter((s) => s.cat === cat)),
     [cat]
   );
+  const n = shots.length;
 
-  // Auto-cycle through the strips like a slow slideshow; pause on hover
-  // or while the lightbox is open.
+  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + n) % n);
+
+  // Auto-rotate the carousel; pause on hover or while the lightbox is open.
   useEffect(() => {
     if (paused || active !== null) return;
-    const t = setInterval(
-      () => setExpanded((e) => (e + 1) % shots.length),
-      3800
-    );
+    const t = setInterval(() => setIndex((i) => (i + 1) % n), 3600);
     return () => clearInterval(t);
-  }, [paused, active, shots.length]);
-
-  const step = (dir: 1 | -1) => {
-    setActive((a) => (a === null ? a : (a + dir + shots.length) % shots.length));
-  };
+  }, [paused, active, n]);
 
   // Keyboard navigation while the lightbox is open.
   useEffect(() => {
     if (active === null) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setActive(null);
-      if (e.key === "ArrowRight") step(1);
-      if (e.key === "ArrowLeft") step(-1);
+      if (e.key === "ArrowRight") setActive((a) => (a === null ? a : (a + 1) % n));
+      if (e.key === "ArrowLeft") setActive((a) => (a === null ? a : (a - 1 + n) % n));
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active === null, shots.length]);
+  }, [active === null, n]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Signed distance from the centre card, wrapping around the ring.
+  const offsetOf = (i: number) => {
+    const raw = (i - index + n) % n;
+    return raw > n / 2 ? raw - n : raw;
+  };
 
   return (
     <section id="gallery" className="relative overflow-hidden border-y border-line bg-bg-soft py-28">
@@ -139,7 +135,7 @@ export default function Gallery() {
                 key={f.key}
                 onClick={() => {
                   setCat(f.key);
-                  setExpanded(0);
+                  setIndex(0);
                   setActive(null);
                 }}
                 aria-pressed={cat === f.key}
@@ -161,140 +157,144 @@ export default function Gallery() {
             ))}
           </div>
         </Reveal>
+      </div>
 
-        {/* expanding-strips gallery — hover/tap a strip and it grows wide */}
-        <motion.div
-          key={cat}
-          initial="hidden"
-          animate="show"
-          variants={{ show: { transition: { staggerChildren: 0.07 } } }}
+      {/* ── 3D coverflow carousel ─────────────────────────────── */}
+      <Reveal delay={0.2}>
+        <div
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className="mt-8 flex h-[560px] flex-col gap-3 md:h-[540px] md:flex-row lg:h-[600px] lg:gap-4"
+          className="relative mt-10 h-[440px] w-full select-none sm:h-[500px] lg:h-[540px]"
+          style={{ perspective: "1400px" }}
         >
           {shots.map((g, i) => {
-            const isOpen = expanded === i;
+            const off = offsetOf(i);
+            const visible = Math.abs(off) <= 2;
+            const isCenter = off === 0;
             return (
               <motion.div
                 key={g.src}
-                variants={{
-                  hidden: { opacity: 0, y: 34 },
-                  show: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-                  },
+                animate={{
+                  x: `calc(-50% + ${off * 46}%)`,
+                  scale: isCenter ? 1 : Math.abs(off) === 1 ? 0.82 : 0.68,
+                  rotateY: off * -28,
+                  opacity: visible ? (isCenter ? 1 : 0.75) : 0,
+                  zIndex: 10 - Math.abs(off),
+                  filter: isCenter
+                    ? "brightness(1) saturate(1)"
+                    : "brightness(0.72) saturate(0.75)",
                 }}
-                style={{ flexGrow: isOpen ? 7 : 1, flexBasis: 0 }}
-                onMouseEnter={() => setExpanded(i)}
-                onFocus={() => setExpanded(i)}
-                onClick={() => (isOpen ? setActive(i) : setExpanded(i))}
+                transition={{ type: "spring", bounce: 0.22, duration: 0.85 }}
+                onClick={() => (isCenter ? setActive(i) : setIndex(i))}
                 role="button"
-                tabIndex={0}
-                aria-expanded={isOpen}
-                aria-label={g.caption}
+                tabIndex={visible ? 0 : -1}
+                aria-label={isCenter ? `Open ${g.caption}` : `Show ${g.caption}`}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    if (isOpen) setActive(i);
-                    else setExpanded(i);
-                  }
+                  if (e.key === "Enter") isCenter ? setActive(i) : setIndex(i);
                 }}
-                className="group relative min-h-0 min-w-0 cursor-pointer overflow-hidden rounded-3xl border border-line bg-panel card-shadow transition-[flex-grow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                className={`absolute left-1/2 top-0 h-[82%] w-[240px] cursor-pointer overflow-hidden rounded-3xl border border-line bg-panel shadow-[0_30px_60px_-25px_rgba(15,21,43,0.45)] sm:w-[300px] lg:w-[340px] ${
+                  visible ? "" : "pointer-events-none"
+                }`}
+                style={{ transformStyle: "preserve-3d" }}
               >
-                {/* slow ken-burns drift while a strip is expanded */}
-                <motion.div
-                  className="absolute inset-0"
-                  animate={
-                    isOpen
-                      ? { scale: [1.02, 1.09], x: [0, -8] }
-                      : { scale: 1.14, x: 0 }
-                  }
-                  transition={
-                    isOpen
-                      ? { duration: 7, ease: "linear" }
-                      : { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
-                  }
-                >
-                  <Image
-                    src={g.src}
-                    alt={g.caption}
-                    fill
-                    sizes="(max-width: 768px) 94vw, 1200px"
-                    className={`object-cover transition-[filter] duration-700 ease-out ${
-                      isOpen
-                        ? "brightness-100 saturate-100"
-                        : "brightness-[0.78] saturate-[0.75] group-hover:brightness-90"
-                    }`}
-                  />
-                </motion.div>
-                {/* legibility gradient */}
+                <Image
+                  src={g.src}
+                  alt={g.caption}
+                  fill
+                  sizes="340px"
+                  className="object-cover"
+                />
+                {/* glass sheen on non-centre cards */}
                 <div
-                  className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/10 transition-opacity duration-500 ${
-                    isOpen ? "opacity-100" : "opacity-40"
+                  className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-white/10 transition-opacity duration-500 ${
+                    isCenter ? "opacity-30" : "opacity-70"
                   }`}
                 />
-
-                {/* expanded caption */}
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 26 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 14 }}
-                      transition={{
-                        type: "spring",
-                        bounce: 0.3,
-                        duration: 0.7,
-                        delay: 0.18,
-                      }}
-                      className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5 lg:p-6"
-                    >
-                      <div className="min-w-0">
-                        <motion.p
-                          initial={{ opacity: 0, x: -14 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.3, duration: 0.45 }}
-                          className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60"
-                        >
-                          {FILTERS.find((f) => f.key === g.cat)?.label}
-                        </motion.p>
-                        <motion.p
-                          initial={{ opacity: 0, x: -14 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.38, duration: 0.45 }}
-                          className="mt-1 truncate text-base font-semibold text-white lg:text-lg"
-                        >
-                          {g.caption}
-                        </motion.p>
-                      </div>
-                      <motion.span
-                        initial={{ scale: 0, rotate: -90 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", bounce: 0.5, delay: 0.35 }}
-                        className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
-                          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </motion.span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* collapsed index chip */}
-                <span
-                  className={`absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-black/35 px-2.5 py-1 font-display text-[11px] font-bold text-white/85 backdrop-blur transition-opacity duration-300 md:top-auto md:bottom-4 ${
-                    isOpen ? "opacity-0" : "opacity-100"
-                  }`}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                {isCenter && (
+                  <span className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
+                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                )}
               </motion.div>
             );
           })}
-        </motion.div>
 
+          {/* drag/swipe layer behind the cards' click targets */}
+          <motion.div
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.12}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60) go(1);
+              else if (info.offset.x > 60) go(-1);
+            }}
+            className="absolute inset-0 z-0"
+          />
+
+          {/* arrows */}
+          <button
+            aria-label="Previous photo"
+            onClick={() => go(-1)}
+            className="card-shadow absolute left-4 top-1/2 z-20 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-line bg-panel/90 text-text backdrop-blur transition hover:bg-panel sm:left-10 lg:left-16"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+              <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            aria-label="Next photo"
+            onClick={() => go(1)}
+            className="card-shadow absolute right-4 top-1/2 z-20 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-line bg-panel/90 text-text backdrop-blur transition hover:bg-panel sm:right-10 lg:right-16"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+              <path d="m9 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
+          {/* caption + dots under the centre card */}
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 px-6">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`${cat}-${index}`}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.35 }}
+                className="text-center"
+              >
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
+                  {FILTERS.find((f) => f.key === shots[index]?.cat)?.label}
+                </p>
+                <p className="mt-1 font-display text-base font-semibold text-text sm:text-lg">
+                  {shots[index]?.caption}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+            <div className="flex items-center gap-2">
+              {shots.map((s, i) => (
+                <button
+                  key={s.src}
+                  onClick={() => setIndex(i)}
+                  aria-label={`Go to photo ${i + 1}`}
+                  className="relative h-2 overflow-hidden rounded-full bg-line transition-all duration-300"
+                  style={{ width: index === i ? 34 : 8 }}
+                >
+                  {index === i && (
+                    <motion.span
+                      layoutId="gallery-dot"
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-violet to-blue"
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Reveal>
+
+      <div className="mx-auto max-w-7xl px-6">
         {/* testimonials */}
         <div className="mt-20">
           <Reveal>
@@ -336,76 +336,77 @@ export default function Gallery() {
           ))}
         </motion.div>
       </div>
+
       {/* lightbox */}
       <AnimatePresence>
-      {active !== null && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          onClick={() => setActive(null)}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
-        >
-          <button
-            aria-label="Close"
-            onClick={() => setActive(null)}
-            className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-              <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
-            </svg>
-          </button>
-          <button
-            aria-label="Previous photo"
-            onClick={(e) => {
-              e.stopPropagation();
-              step(-1);
-            }}
-            className="absolute left-3 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:left-6"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-              <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <button
-            aria-label="Next photo"
-            onClick={(e) => {
-              e.stopPropagation();
-              step(1);
-            }}
-            className="absolute right-3 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:right-6"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-              <path d="m9 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
+        {active !== null && (
           <motion.div
-            key={shots[active].src}
-            initial={{ scale: 0.94, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[88vh] w-full max-w-4xl flex-col items-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setActive(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
           >
-            <div className="relative h-[76vh] w-full">
-              <Image
-                src={shots[active].src}
-                alt={shots[active].caption}
-                fill
-                sizes="100vw"
-                className="object-contain"
-              />
-            </div>
-            <p className="mt-4 text-center text-sm font-medium text-white/85">
-              {shots[active].caption}
-              <span className="ml-3 text-white/45">
-                {active + 1} / {shots.length}
-              </span>
-            </p>
+            <button
+              aria-label="Close"
+              onClick={() => setActive(null)}
+              className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+                <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
+              </svg>
+            </button>
+            <button
+              aria-label="Previous photo"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActive((a) => (a === null ? a : (a - 1 + n) % n));
+              }}
+              className="absolute left-3 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:left-6"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+                <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              aria-label="Next photo"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActive((a) => (a === null ? a : (a + 1) % n));
+              }}
+              className="absolute right-3 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:right-6"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+                <path d="m9 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <motion.div
+              key={shots[active].src}
+              initial={{ scale: 0.94, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative flex max-h-[88vh] w-full max-w-4xl flex-col items-center"
+            >
+              <div className="relative h-[76vh] w-full">
+                <Image
+                  src={shots[active].src}
+                  alt={shots[active].caption}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                />
+              </div>
+              <p className="mt-4 text-center text-sm font-medium text-white/85">
+                {shots[active].caption}
+                <span className="ml-3 text-white/45">
+                  {active + 1} / {n}
+                </span>
+              </p>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
       </AnimatePresence>
     </section>
   );

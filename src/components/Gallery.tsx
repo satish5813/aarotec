@@ -68,7 +68,10 @@ export default function Gallery() {
   const [cat, setCat] = useState<Category>("all");
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
   const [active, setActive] = useState<number | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const row = [...QUOTES, ...QUOTES];
 
@@ -81,19 +84,35 @@ export default function Gallery() {
 
   const go = (dir: 1 | -1) => setIndex((i) => (i + dir + n) % n);
 
-  // Auto-advance in sync with the progress bar; pause on hover/lightbox.
+  // Only run the show while the stage is actually on screen.
   useEffect(() => {
-    if (paused || active !== null) return;
+    const el = stageRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => setInView(e.isIntersecting),
+      { threshold: 0.3 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Auto-advance in sync with the progress bar; pause when off-screen,
+  // hovered, or while the lightbox is open.
+  useEffect(() => {
+    if (!inView || paused || active !== null) return;
     const t = setInterval(() => setIndex((i) => (i + 1) % n), SLIDE_MS);
     return () => clearInterval(t);
-  }, [paused, active, n]);
+  }, [inView, paused, active, n]);
 
-  // Keep the active thumbnail in view.
+  // Keep the active thumbnail centred by scrolling ONLY the filmstrip —
+  // scrollIntoView would scroll the whole page to the gallery.
   useEffect(() => {
-    thumbRefs.current[index]?.scrollIntoView({
+    const strip = stripRef.current;
+    const thumb = thumbRefs.current[index];
+    if (!strip || !thumb) return;
+    strip.scrollTo({
+      left: thumb.offsetLeft - (strip.clientWidth - thumb.clientWidth) / 2,
       behavior: "smooth",
-      inline: "center",
-      block: "nearest",
     });
   }, [index]);
 
@@ -134,6 +153,7 @@ export default function Gallery() {
 
       {/* ── Cinematic full-bleed stage ────────────────────────── */}
       <div
+        ref={stageRef}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         className="relative w-full overflow-hidden bg-[#07090f]"
@@ -289,7 +309,7 @@ export default function Gallery() {
           {/* slide progress bar */}
           <div className="absolute inset-x-0 bottom-[88px] z-20 px-6 sm:px-12 lg:px-20">
             <div className="h-px w-full overflow-hidden bg-white/15">
-              {!paused && active === null ? (
+              {inView && !paused && active === null ? (
                 <motion.div
                   key={`${cat}-${index}`}
                   initial={{ scaleX: 0 }}
@@ -304,7 +324,10 @@ export default function Gallery() {
           </div>
 
           {/* filmstrip */}
-          <div className="no-scrollbar absolute inset-x-0 bottom-0 z-20 flex gap-2.5 overflow-x-auto px-6 pb-5 pt-2 sm:px-12 lg:px-20">
+          <div
+            ref={stripRef}
+            className="no-scrollbar absolute inset-x-0 bottom-0 z-20 flex gap-2.5 overflow-x-auto px-6 pb-5 pt-2 sm:px-12 lg:px-20"
+          >
             {shots.map((s, i) => (
               <button
                 key={s.src}

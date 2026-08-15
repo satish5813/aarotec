@@ -1,18 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
 import { motion } from "motion/react";
 import Reveal from "./Reveal";
-import { LightsIcon, FanIcon } from "./icons";
-
-const ROOMS = ["Living", "Bedroom", "Kitchen", "Office"];
 
 export default function AppShowcase() {
-  const [room, setRoom] = useState(0);
-  const [lights, setLights] = useState(true);
-  const [fan, setFan] = useState(false);
-  const [bright, setBright] = useState(70);
-
   return (
     <section className="relative overflow-hidden border-y border-line bg-bg-soft py-28">
       <div className="pointer-events-none absolute right-0 top-0 -z-10 h-80 w-80 rounded-full bg-blue/10 blur-[120px]" />
@@ -44,107 +36,41 @@ export default function AppShowcase() {
           </ul>
         </Reveal>
 
-        {/* CSS phone mockup */}
+        {/* Real app screenshots — tablet behind, phone in front */}
         <Reveal delay={0.1}>
-          <div className="mx-auto w-[300px]">
+          <div className="relative mx-auto w-full max-w-[560px] pb-10 pl-6 sm:pl-10">
+            <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-violet/15 to-blue/15 blur-[80px]" />
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="card-shadow rounded-[2.6rem] border border-line bg-panel p-3"
+              className="ml-auto w-[86%]"
             >
-              <div className="rounded-[2.1rem] bg-bg p-5">
-                <div className="mx-auto mb-5 h-1.5 w-16 rounded-full bg-line" />
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-muted">Good evening</p>
-                    <p className="font-display text-lg font-bold">Home</p>
-                  </div>
-                  <span className="h-9 w-9 rounded-full bg-gradient-to-br from-violet to-blue" />
-                </div>
+              <Image
+                src="/TAB.jpg"
+                alt="Aaro Tec app on a tablet — Hall dashboard with switches, fans and scenes"
+                width={1228}
+                height={1600}
+                className="h-auto w-full rounded-[1.9rem] shadow-[0_30px_70px_-30px_rgba(15,21,43,0.45)] ring-1 ring-line"
+              />
+            </motion.div>
 
-                <div className="mt-5 flex gap-2">
-                  {ROOMS.map((r, i) => (
-                    <button
-                      key={r}
-                      onClick={() => setRoom(i)}
-                      className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition ${
-                        room === i
-                          ? "bg-cta text-cta-fg"
-                          : "bg-bg-soft text-muted"
-                      }`}
-                    >
-                      {r}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setLights((v) => !v)}
-                    className={`rounded-2xl border p-4 text-left transition ${
-                      lights
-                        ? "border-transparent bg-gradient-to-br from-amber/90 to-amber text-black"
-                        : "border-line bg-bg-soft text-muted"
-                    }`}
-                  >
-                    <LightsIcon className="h-5 w-5" />
-                    <span className="mt-3 block text-xs font-semibold">
-                      Lights
-                    </span>
-                    <span className="text-[10px] opacity-70">
-                      {lights ? "On" : "Off"}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => setFan((v) => !v)}
-                    className={`rounded-2xl border p-4 text-left transition ${
-                      fan
-                        ? "border-transparent bg-gradient-to-br from-blue to-violet text-white"
-                        : "border-line bg-bg-soft text-muted"
-                    }`}
-                  >
-                    <motion.span
-                      animate={{ rotate: fan ? 360 : 0 }}
-                      transition={
-                        fan
-                          ? { repeat: Infinity, duration: 1.2, ease: "linear" }
-                          : { duration: 0.3 }
-                      }
-                      className="block w-fit"
-                    >
-                      <FanIcon className="h-5 w-5" />
-                    </motion.span>
-                    <span className="mt-3 block text-xs font-semibold">Fan</span>
-                    <span className="text-[10px] opacity-70">
-                      {fan ? "Running" : "Off"}
-                    </span>
-                  </button>
-                </div>
-
-                <div className="mt-3 rounded-2xl border border-line bg-bg-soft p-4">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted">Brightness</span>
-                    <span className="font-semibold">{bright}%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    value={bright}
-                    onChange={(e) => setBright(+e.target.value)}
-                    className="mt-3 w-full accent-violet"
-                  />
-                </div>
-
-                <div className="mt-3 flex items-center justify-between rounded-2xl bg-gradient-to-r from-violet/15 to-blue/15 p-4 text-xs">
-                  <span className="text-muted">Today&apos;s energy</span>
-                  <span className="font-display text-base font-bold">
-                    3.2 kWh
-                  </span>
-                </div>
-              </div>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="absolute -bottom-2 left-0 w-[42%] sm:w-[40%]"
+            >
+              <Image
+                src="/MOBILE.jpg"
+                alt="Aaro Tec app on a phone — Living Room switches and dimmers"
+                width={660}
+                height={1346}
+                className="h-auto w-full rounded-[2rem] shadow-[0_34px_70px_-28px_rgba(15,21,43,0.55)] ring-1 ring-line"
+              />
             </motion.div>
           </div>
         </Reveal>

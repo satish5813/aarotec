@@ -1,20 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Reveal from "./Reveal";
 import AnimatedHeading from "./AnimatedHeading";
 
+// The stage plays /living-room.mp4 (real room animation) in four equal
+// segments — one per scene. Picking a scene seeks its segment; playback
+// auto-advances through scenes like a guided tour.
 type Scene = {
   id: string;
   label: string;
   icon: string;
-  sky: string; // what you see through the window
-  wall: string; // room wall colour
-  ambient: string; // soft room light wash
-  dim: number; // 0 bright -> 0.7 night darkness
-  curtain: number; // 0 closed -> 100 fully open
-  lamp: number; // 0 off -> 1 full glow
+  caption: string;
   stats: { lights: string; curtain: string; climate: string; security: string };
   actions: string[];
 };
@@ -24,12 +22,7 @@ const SCENES: Scene[] = [
     id: "morning",
     label: "Morning",
     icon: "☀",
-    sky: "linear-gradient(180deg,#bfe0ff,#fef3da)",
-    wall: "#f1ece2",
-    ambient: "rgba(255,221,150,0.18)",
-    dim: 0,
-    curtain: 100,
-    lamp: 0,
+    caption: "Curtains glide open and lights fade up — the room eases you into the day.",
     stats: { lights: "60%", curtain: "Open", climate: "23°C", security: "Disarmed" },
     actions: [
       "Curtains drawn fully open",
@@ -42,12 +35,7 @@ const SCENES: Scene[] = [
     id: "movie",
     label: "Movie Night",
     icon: "🎬",
-    sky: "linear-gradient(180deg,#181a2b,#0c0d16)",
-    wall: "#1a1726",
-    ambient: "rgba(106,75,255,0.4)",
-    dim: 0.5,
-    curtain: 0,
-    lamp: 0.3,
+    caption: "Lights dim, curtains close, the sound bar wakes — instant cinema.",
     stats: { lights: "15%", curtain: "Closed", climate: "22°C", security: "Disarmed" },
     actions: [
       "Curtains drawn closed",
@@ -60,12 +48,7 @@ const SCENES: Scene[] = [
     id: "goodnight",
     label: "Goodnight",
     icon: "🌙",
-    sky: "linear-gradient(180deg,#0b1430,#070912)",
-    wall: "#0e1322",
-    ambient: "rgba(79,139,255,0.22)",
-    dim: 0.66,
-    curtain: 0,
-    lamp: 0.12,
+    caption: "One tap locks the doors and puts the whole home to sleep.",
     stats: { lights: "Off", curtain: "Closed", climate: "Sleep", security: "Armed" },
     actions: [
       "All lights off except pathway",
@@ -78,12 +61,7 @@ const SCENES: Scene[] = [
     id: "away",
     label: "Away",
     icon: "🏃",
-    sky: "linear-gradient(180deg,#9fb4c9,#dfe6ee)",
-    wall: "#e7e9ec",
-    ambient: "rgba(0,0,0,0)",
-    dim: 0.12,
-    curtain: 50,
-    lamp: 0,
+    caption: "Everything powers down and the house keeps watch while you're out.",
     stats: { lights: "Off", curtain: "Half", climate: "Eco", security: "Armed" },
     actions: [
       "Everything powered down",
@@ -117,8 +95,59 @@ function StatChip({ label, value }: { label: string; value: string }) {
 }
 
 export default function Scenes() {
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
+  const [progress, setProgress] = useState(0); // 0..1 inside the active segment
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const activeRef = useRef(0);
+  activeRef.current = active;
+
   const s = SCENES[active];
+
+  const seekTo = (i: number) => {
+    setActive(i);
+    setProgress(0);
+    const v = videoRef.current;
+    if (!v || !isFinite(v.duration) || v.duration === 0) return;
+    v.currentTime = (i * v.duration) / SCENES.length;
+    v.play().catch(() => {});
+  };
+
+  const onTimeUpdate = () => {
+    const v = videoRef.current;
+    if (!v || !isFinite(v.duration) || v.duration === 0) return;
+    const seg = v.duration / SCENES.length;
+    const i = activeRef.current;
+    setProgress(Math.min(1, Math.max(0, (v.currentTime - i * seg) / seg)));
+    // auto-advance to the next scene as its segment begins
+    if (v.currentTime >= (i + 1) * seg - 0.05 && i < SCENES.length - 1) {
+      setActive(i + 1);
+      setProgress(0);
+    }
+  };
+
+  const onEnded = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = 0;
+    setActive(0);
+    setProgress(0);
+    v.play().catch(() => {});
+  };
+
+  // Play while the stage is on screen, pause when it scrolls away.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-28">
@@ -140,93 +169,21 @@ export default function Scenes() {
       </Reveal>
 
       <div className="mt-12 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-        {/* ── Left: live room preview ───────────────────────── */}
+        {/* ── Left: live room video stage ───────────────────── */}
         <div>
-          <div className="card-shadow relative h-[420px] overflow-hidden rounded-3xl border border-line">
-            {/* room back wall */}
-            <motion.div
-              className="absolute inset-0"
-              animate={{ backgroundColor: s.wall }}
-              transition={{ duration: 0.8 }}
+          <div className="card-shadow group relative h-[420px] overflow-hidden rounded-3xl border border-line bg-black">
+            <video
+              ref={videoRef}
+              src="/living-room.mp4"
+              muted
+              playsInline
+              preload="metadata"
+              onTimeUpdate={onTimeUpdate}
+              onEnded={onEnded}
+              className="h-full w-full object-cover"
             />
-            {/* floor */}
-            <div className="absolute inset-x-0 bottom-0 h-[28%] bg-black/15" />
-            <div className="absolute inset-x-0 bottom-[28%] h-px bg-white/15" />
-
-            {/* window with curtains that draw open and closed */}
-            <div className="absolute left-12 top-14 h-48 w-60 overflow-hidden rounded-xl border-[3px] border-black/25 shadow-inner">
-              <motion.div
-                className="absolute inset-0"
-                animate={{ background: s.sky }}
-                transition={{ duration: 0.9 }}
-              />
-              {/* window cross frame */}
-              <div className="absolute left-1/2 top-0 h-full w-[3px] -translate-x-1/2 bg-black/20" />
-              <div className="absolute left-0 top-1/2 h-[3px] w-full -translate-y-1/2 bg-black/20" />
-
-              {/* left curtain panel — gathers to the side when open */}
-              <motion.div
-                className="absolute inset-y-0 left-0"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(90deg,#7c89ad 0px,#aab4d2 6px,#c6cee5 9px,#9aa6c6 13px,#7c89ad 18px)",
-                  boxShadow: "inset -10px 0 16px -8px rgba(0,0,0,0.4)",
-                }}
-                animate={{ width: `${8 + ((100 - s.curtain) / 100) * 42}%` }}
-                transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-              />
-              {/* right curtain panel */}
-              <motion.div
-                className="absolute inset-y-0 right-0"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(90deg,#9aa6c6 0px,#c6cee5 6px,#aab4d2 9px,#7c89ad 13px,#9aa6c6 18px)",
-                  boxShadow: "inset 10px 0 16px -8px rgba(0,0,0,0.4)",
-                }}
-                animate={{ width: `${8 + ((100 - s.curtain) / 100) * 42}%` }}
-                transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-              />
-              {/* curtain rod across the top */}
-              <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-b from-[#5b6680] to-[#3c4358]" />
-            </div>
-
-            {/* floor lamp with a real glowing bulb */}
-            <div className="absolute bottom-[28%] right-16 flex flex-col items-center">
-              <motion.div
-                className="h-12 w-12 rounded-full"
-                animate={{
-                  backgroundColor: `rgba(255,200,128,${0.25 + s.lamp})`,
-                  boxShadow: `0 0 ${20 + s.lamp * 70}px ${
-                    8 + s.lamp * 26
-                  }px rgba(255,196,120,${s.lamp * 0.85})`,
-                }}
-                transition={{ duration: 0.8 }}
-              />
-              <div className="h-1 w-12 rounded bg-black/40" />
-              <div className="h-24 w-1 bg-black/40" />
-              <div className="h-1.5 w-12 rounded bg-black/50" />
-            </div>
-
-            {/* sofa */}
-            <div className="absolute bottom-[20%] left-14 h-20 w-56">
-              <div className="absolute bottom-0 h-12 w-full rounded-xl bg-black/30" />
-              <div className="absolute bottom-7 h-12 w-full rounded-t-2xl bg-black/25" />
-              <div className="absolute bottom-3 left-3 h-9 w-9 rounded-lg bg-white/10" />
-              <div className="absolute bottom-3 right-3 h-9 w-9 rounded-lg bg-white/10" />
-            </div>
-
-            {/* night dimming wash */}
-            <motion.div
-              className="pointer-events-none absolute inset-0 bg-[#05060c]"
-              animate={{ opacity: s.dim }}
-              transition={{ duration: 0.8 }}
-            />
-            {/* ambient colour wash */}
-            <motion.div
-              className="pointer-events-none absolute inset-0"
-              animate={{ backgroundColor: s.ambient }}
-              transition={{ duration: 0.8 }}
-            />
+            {/* legibility vignette */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-black/25" />
 
             {/* labels */}
             <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
@@ -236,6 +193,68 @@ export default function Scenes() {
             <div className="absolute right-5 top-5 flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#1fd18a]" />
               Live preview
+            </div>
+
+            {/* animated caption card */}
+            <div className="absolute inset-x-5 bottom-16 sm:inset-x-auto sm:right-8 sm:bottom-16 sm:w-80">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={s.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="rounded-2xl border border-white/15 bg-white/10 p-5 text-center backdrop-blur-md"
+                >
+                  <p className="font-display text-xl font-semibold text-white">
+                    {s.icon} {s.label}
+                  </p>
+                  <p className="mt-1.5 text-sm font-light italic leading-snug text-white/85">
+                    {s.caption}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* segment progress + replay */}
+            <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3">
+              <button
+                onClick={() => seekTo(active)}
+                aria-label="Replay this scene"
+                className="grid h-8 w-8 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                </svg>
+              </button>
+              <div className="flex items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur">
+                {SCENES.map((sc, i) => (
+                  <button
+                    key={sc.id}
+                    onClick={() => seekTo(i)}
+                    aria-label={`Play ${sc.label} scene`}
+                    className="relative h-2 overflow-hidden rounded-full bg-white/25 transition-all duration-300"
+                    style={{ width: active === i ? 40 : 8 }}
+                  >
+                    {active === i && (
+                      <span
+                        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-violet to-blue"
+                        style={{ width: `${progress * 100}%` }}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -257,7 +276,7 @@ export default function Scenes() {
             {SCENES.map((sc, i) => (
               <button
                 key={sc.id}
-                onClick={() => setActive(i)}
+                onClick={() => seekTo(i)}
                 aria-pressed={active === i}
                 className={`card-shadow flex items-center gap-3 rounded-2xl border p-4 text-left transition ${
                   active === i

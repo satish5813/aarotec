@@ -1,38 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import Reveal from "./Reveal";
 import AnimatedHeading from "./AnimatedHeading";
 
-// Real installation photos from homes across India, curated best-first.
-const INSTALLS = [
-  { src: "/products/mocha-room.jpg", caption: "Mocha panel in a wood-panelled living room" },
-  { src: "/products/mocha-lamp.jpg", caption: "Warm corners, smarter switches" },
-  { src: "/products/mocha-wood.jpg", caption: "Flush fit in fluted wood" },
-  { src: "/products/mocha-shelf.jpg", caption: "Design that disappears into the decor" },
-  { src: "/products/mocha-touch.jpg", caption: "One touch on the Mocha panel" },
-  { src: "/lock-keypad.jpeg", caption: "Fingerprint, PIN & RFID access" },
-  { src: "/lock-display.jpeg", caption: "Smart display, one-touch open" },
-  { src: "/lock-handle.jpeg", caption: "Premium matte-black lever" },
-  { src: "/lock-mechanism.jpeg", caption: "Multi-point mortise locking" },
-  { src: "/lock-installed.jpeg", caption: "Seamless on-door fit" },
-  { src: "/lock-box.jpeg", caption: "Keyless convenience, in the box" },
-  { src: "/lock-fit.jpeg", caption: "Professional installation" },
-  { src: "/lock-strike.jpeg", caption: "Precision strike plate" },
-  { src: "/lock-onsite.jpeg", caption: "On-site fitting by our team" },
-  { src: "/locs/install-2.jpeg", caption: "Entryway panel by the front door" },
-  { src: "/locs/install-7.jpeg", caption: "One-touch scene controls" },
-  { src: "/locs/install-10.jpeg", caption: "Living room dual-panel setup" },
-  { src: "/locs/install-3.jpeg", caption: "8-scene glass touch panel" },
-  { src: "/locs/install-4.jpeg", caption: "Bedside touch panel" },
-  { src: "/locs/install-6.jpeg", caption: "Seven-way touch switchboard" },
-  { src: "/locs/install-9.jpeg", caption: "Light & fan control panel" },
-  { src: "/locs/install-8.jpeg", caption: "Switches & sockets in one glass" },
-  { src: "/locs/install-1.jpeg", caption: "Smart socket with built-in USB" },
-  { src: "/locs/install-5.jpeg", caption: "Panels in every room" },
-] as const;
+// Curated, colour-corrected installation photography (public/gallery is
+// the enhanced set — the rough phone originals stay out of the site).
+type Category = "all" | "interiors" | "panels" | "locks";
+
+type Shot = {
+  src: string;
+  caption: string;
+  cat: Exclude<Category, "all">;
+  w: number;
+  h: number;
+};
+
+const SHOTS: Shot[] = [
+  { src: "/products/mocha-room.jpg", caption: "Mocha panel in a wood-panelled living room", cat: "interiors", w: 1600, h: 1067 },
+  { src: "/gallery/panel-icons.jpg", caption: "One-touch scene controls", cat: "panels", w: 1200, h: 1600 },
+  { src: "/products/mocha-lamp.jpg", caption: "Warm corners, smarter switches", cat: "interiors", w: 1200, h: 1800 },
+  { src: "/gallery/lock-keypad.jpg", caption: "Fingerprint, PIN & RFID access", cat: "locks", w: 720, h: 1280 },
+  { src: "/gallery/panel-plant.jpg", caption: "Living room dual-panel setup", cat: "panels", w: 1200, h: 1600 },
+  { src: "/products/mocha-touch.jpg", caption: "One touch on the Mocha panel", cat: "interiors", w: 1200, h: 1200 },
+  { src: "/gallery/panel-wood.jpg", caption: "Switches & sockets in one glass", cat: "panels", w: 1200, h: 900 },
+  { src: "/gallery/lock-handle.jpg", caption: "Premium matte-black lever", cat: "locks", w: 1200, h: 1600 },
+  { src: "/products/mocha-wood.jpg", caption: "Flush fit in fluted wood", cat: "interiors", w: 1200, h: 1600 },
+  { src: "/gallery/panel-8scene.jpg", caption: "8-scene glass touch panel", cat: "panels", w: 1200, h: 900 },
+  { src: "/gallery/lock-display.jpg", caption: "Smart display, one-touch open", cat: "locks", w: 720, h: 1280 },
+  { src: "/gallery/panel-7way.jpg", caption: "Seven-way touch switchboard", cat: "panels", w: 1200, h: 675 },
+  { src: "/products/mocha-shelf.jpg", caption: "Design that disappears into the decor", cat: "interiors", w: 1200, h: 1800 },
+  { src: "/gallery/panel-socket.jpg", caption: "Smart socket with built-in USB", cat: "panels", w: 1200, h: 900 },
+  { src: "/gallery/lock-installed.jpg", caption: "Seamless on-door fit", cat: "locks", w: 1200, h: 1600 },
+  { src: "/gallery/panel-bedside.jpg", caption: "Bedside touch panel", cat: "panels", w: 1061, h: 533 },
+  { src: "/gallery/panel-fan.jpg", caption: "Light & fan control panel", cat: "panels", w: 1200, h: 675 },
+];
+
+const FILTERS: { key: Category; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "interiors", label: "Interiors" },
+  { key: "panels", label: "Switch Panels" },
+  { key: "locks", label: "Smart Locks" },
+];
 
 const QUOTES = [
   {
@@ -54,8 +65,31 @@ const QUOTES = [
 ];
 
 export default function Gallery() {
+  const [cat, setCat] = useState<Category>("all");
   const [active, setActive] = useState<number | null>(null);
   const row = [...QUOTES, ...QUOTES];
+
+  const shots = useMemo(
+    () => (cat === "all" ? SHOTS : SHOTS.filter((s) => s.cat === cat)),
+    [cat]
+  );
+
+  const step = (dir: 1 | -1) => {
+    setActive((a) => (a === null ? a : (a + dir + shots.length) % shots.length));
+  };
+
+  // Keyboard navigation while the lightbox is open.
+  useEffect(() => {
+    if (active === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActive(null);
+      if (e.key === "ArrowRight") step(1);
+      if (e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active === null, shots.length]);
 
   return (
     <section id="gallery" className="relative overflow-hidden border-y border-line bg-bg-soft py-28">
@@ -82,37 +116,86 @@ export default function Gallery() {
           </Reveal>
         </div>
 
-        {/* installation image grid */}
-        <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:gap-5">
-          {INSTALLS.map((g, i) => (
-            <Reveal key={g.src} delay={(i % 3) * 0.06}>
+        {/* category filter */}
+        <Reveal delay={0.15}>
+          <div className="mt-10 flex flex-wrap items-center gap-2">
+            {FILTERS.map((f) => (
+              <button
+                key={f.key}
+                onClick={() => {
+                  setCat(f.key);
+                  setActive(null);
+                }}
+                aria-pressed={cat === f.key}
+                className={`relative rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-300 ${
+                  cat === f.key
+                    ? "text-cta-fg"
+                    : "border border-line bg-panel text-muted hover:text-text"
+                }`}
+              >
+                {cat === f.key && (
+                  <motion.span
+                    layoutId="gallery-filter-pill"
+                    transition={{ type: "spring", bounce: 0.25, duration: 0.55 }}
+                    className="absolute inset-0 rounded-full bg-cta"
+                  />
+                )}
+                <span className="relative">{f.label}</span>
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* masonry gallery — natural aspect ratios, staggered entrance */}
+        <motion.div
+          key={cat}
+          initial="hidden"
+          animate="show"
+          variants={{ show: { transition: { staggerChildren: 0.055 } } }}
+          className="mt-8 columns-2 gap-4 sm:columns-3 lg:gap-5 [column-fill:balance]"
+        >
+          {shots.map((g, i) => (
+            <motion.div
+              key={g.src}
+              variants={{
+                hidden: { opacity: 0, y: 26, scale: 0.97 },
+                show: {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+              className="mb-4 break-inside-avoid lg:mb-5"
+            >
               <button
                 type="button"
                 onClick={() => setActive(i)}
-                className="group relative block aspect-[3/4] w-full overflow-hidden rounded-2xl border border-line bg-panel card-shadow"
+                className="group relative block w-full overflow-hidden rounded-2xl border border-line bg-panel card-shadow"
               >
                 <Image
                   src={g.src}
                   alt={g.caption}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 380px"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                  width={g.w}
+                  height={g.h}
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
+                  className="h-auto w-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.05] group-hover:brightness-[1.06]"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/0 to-black/0" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="absolute inset-x-0 bottom-0 p-4 text-left">
-                  <p className="translate-y-1 text-sm font-semibold text-white opacity-90 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="translate-y-2 text-sm font-semibold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 sm:text-[13px]">
                     {g.caption}
                   </p>
                 </div>
-                <span className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
+                <span className="absolute right-3 top-3 grid h-9 w-9 scale-75 place-items-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
                     <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
               </button>
-            </Reveal>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* testimonials */}
         <div className="mt-20">
@@ -172,24 +255,52 @@ export default function Gallery() {
               <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
             </svg>
           </button>
-          <motion.div
-            initial={{ scale: 0.92, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[88vh] w-full max-w-3xl flex-col items-center"
+          <button
+            aria-label="Previous photo"
+            onClick={(e) => {
+              e.stopPropagation();
+              step(-1);
+            }}
+            className="absolute left-3 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:left-6"
           >
-            <div className="relative h-[78vh] w-full">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+              <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            aria-label="Next photo"
+            onClick={(e) => {
+              e.stopPropagation();
+              step(1);
+            }}
+            className="absolute right-3 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:right-6"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+              <path d="m9 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <motion.div
+            key={shots[active].src}
+            initial={{ scale: 0.94, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative flex max-h-[88vh] w-full max-w-4xl flex-col items-center"
+          >
+            <div className="relative h-[76vh] w-full">
               <Image
-                src={INSTALLS[active].src}
-                alt={INSTALLS[active].caption}
+                src={shots[active].src}
+                alt={shots[active].caption}
                 fill
                 sizes="100vw"
                 className="object-contain"
               />
             </div>
-            <p className="mt-4 text-center text-sm font-medium text-white/80">
-              {INSTALLS[active].caption}
+            <p className="mt-4 text-center text-sm font-medium text-white/85">
+              {shots[active].caption}
+              <span className="ml-3 text-white/45">
+                {active + 1} / {shots.length}
+              </span>
             </p>
           </motion.div>
         </motion.div>

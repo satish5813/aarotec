@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "motion/react";
 import Image from "next/image";
 import {
   LightsIcon,
@@ -26,6 +31,73 @@ const fade = (delay: number) => ({
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] as const },
 });
+
+/** Headline words rise out of a mask one-by-one. */
+function WordReveal({
+  words,
+  baseDelay,
+  className = "",
+}: {
+  words: string;
+  baseDelay: number;
+  className?: string;
+}) {
+  return (
+    <span className={className}>
+      {words.split(" ").map((w, i) => (
+        <span key={i} className="inline-block overflow-hidden pb-1 align-top">
+          <motion.span
+            initial={{ y: "112%" }}
+            animate={{ y: 0 }}
+            transition={{
+              delay: baseDelay + i * 0.09,
+              duration: 0.75,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="inline-block"
+          >
+            {w}
+            {" "}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/** Counts from 0 to the target once the hero mounts. */
+function CountUp({
+  to,
+  suffix,
+  decimals = 0,
+  delay = 0.7,
+}: {
+  to: number;
+  suffix: string;
+  decimals?: number;
+  delay?: number;
+}) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const start = performance.now() + delay * 1000;
+    const dur = 1600;
+    const tick = (t: number) => {
+      const p = Math.min(1, Math.max(0, (t - start) / dur));
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(to * eased);
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [to, delay]);
+  return (
+    <>
+      {val.toFixed(decimals)}
+      {suffix}
+    </>
+  );
+}
 
 function FloatCard({
   className,
@@ -67,19 +139,52 @@ export default function Hero() {
     return () => clearInterval(t);
   }, [ctrlPaused]);
 
+  // Mouse parallax — the stage tilts toward the cursor, cards drift the
+  // other way, and the glow orbs trail behind. Springs keep it silky.
+  const sectionRef = useRef<HTMLElement>(null);
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const spring = { stiffness: 55, damping: 16, mass: 0.6 };
+  const imgX = useSpring(useTransform(mx, [0, 1], [-16, 16]), spring);
+  const imgY = useSpring(useTransform(my, [0, 1], [-10, 10]), spring);
+  const tiltY = useSpring(useTransform(mx, [0, 1], [5.5, -5.5]), spring);
+  const tiltX = useSpring(useTransform(my, [0, 1], [-4, 4]), spring);
+  const cardX = useSpring(useTransform(mx, [0, 1], [12, -12]), spring);
+  const cardY = useSpring(useTransform(my, [0, 1], [8, -8]), spring);
+  const orbX = useSpring(useTransform(mx, [0, 1], [26, -26]), spring);
+  const orbY = useSpring(useTransform(my, [0, 1], [18, -18]), spring);
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    const r = sectionRef.current?.getBoundingClientRect();
+    if (!r) return;
+    mx.set((e.clientX - r.left) / r.width);
+    my.set((e.clientY - r.top) / r.height);
+  };
+
   return (
-    <section className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden bg-paper pb-16 pt-24 sm:pb-20 sm:pt-28">
+    <section
+      ref={sectionRef}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => {
+        mx.set(0.5);
+        my.set(0.5);
+      }}
+      className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden bg-paper pb-16 pt-24 sm:pb-20 sm:pt-28"
+    >
       {/* layered vibrant backdrop */}
       <div className="pointer-events-none absolute inset-0 -z-30 aurora-modern opacity-90" />
       <div className="pointer-events-none absolute inset-0 -z-20 grid-fade opacity-[0.32]" />
       {/* top spotlight */}
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-20 h-[60vh] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(124,58,237,0.12),transparent_70%)]" />
-      {/* drifting glow orbs */}
-      <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
+      {/* drifting glow orbs — trail the cursor via spring parallax */}
+      <motion.div
+        style={{ x: orbX, y: orbY }}
+        className="pointer-events-none absolute inset-0 -z-20 overflow-hidden"
+      >
         <div className="orb absolute -left-24 top-10 h-[380px] w-[380px] rounded-full bg-blue/25 blur-[130px] sm:h-[460px] sm:w-[460px]" />
         <div className="orb absolute right-[-12%] top-[26%] h-[400px] w-[400px] rounded-full bg-violet/25 blur-[140px] sm:h-[480px] sm:w-[480px]" />
         <div className="orb absolute bottom-[-10%] left-1/3 h-[320px] w-[320px] rounded-full bg-sky/15 blur-[130px]" />
-      </div>
+      </motion.div>
 
       <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         {/* ───────────── copy ───────────── */}
@@ -97,14 +202,15 @@ export default function Hero() {
             <span className="font-semibold text-glow">7-year warranty</span>
           </motion.span>
 
-          <motion.h1
-            {...fade(0.08)}
-            className="font-display mt-5 text-[2.6rem] font-bold leading-[1.02] tracking-[-0.03em] text-text sm:mt-6 sm:text-6xl lg:text-[5.1rem]"
-          >
-            Smart Homes That
+          <h1 className="font-display mt-5 text-[2.6rem] font-bold leading-[1.02] tracking-[-0.03em] text-text sm:mt-6 sm:text-6xl lg:text-[5.1rem]">
+            <WordReveal words="Smart Homes That" baseDelay={0.12} />
             <br />
-            <span className="text-glow">Feel Effortless.</span>
-          </motion.h1>
+            <WordReveal
+              words="Feel Effortless."
+              baseDelay={0.4}
+              className="text-glow"
+            />
+          </h1>
 
           <motion.p
             {...fade(0.16)}
@@ -241,15 +347,19 @@ export default function Hero() {
             <div className="hidden h-10 w-px bg-line sm:block" />
             <div className="flex gap-6 sm:gap-8">
               {[
-                ["45+", "Cities"],
-                ["9+", "Years"],
-                ["99.9%", "Uptime"],
-              ].map(([n, l]) => (
-                <div key={l} className="text-left">
+                { to: 45, suffix: "+", label: "Cities" },
+                { to: 9, suffix: "+", label: "Years" },
+                { to: 99.9, suffix: "%", decimals: 1, label: "Uptime" },
+              ].map((s) => (
+                <div key={s.label} className="text-left">
                   <div className="font-display text-xl font-bold text-glow">
-                    {n}
+                    <CountUp
+                      to={s.to}
+                      suffix={s.suffix}
+                      decimals={s.decimals ?? 0}
+                    />
                   </div>
-                  <div className="text-xs text-muted">{l}</div>
+                  <div className="text-xs text-muted">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -257,17 +367,28 @@ export default function Hero() {
         </div>
 
         {/* ───────────── premium product stage ───────────── */}
-        <div className="relative mx-auto h-[54vh] min-h-[360px] w-full max-w-xl sm:h-[58vh] sm:min-h-[440px] lg:h-[66vh] lg:min-h-[540px] lg:max-w-none">
+        <div
+          className="relative mx-auto h-[54vh] min-h-[360px] w-full max-w-xl sm:h-[58vh] sm:min-h-[440px] lg:h-[66vh] lg:min-h-[540px] lg:max-w-none"
+          style={{ perspective: "1200px" }}
+        >
           {/* ambient brand glow behind the devices */}
           <div className="glow-ring glow-pulse pointer-events-none absolute left-1/2 top-1/2 -z-20 h-[78%] w-[84%] rounded-full opacity-55 blur-[48px]" />
           {/* soft ground shadow so the devices feel placed, not pasted */}
           <div className="pointer-events-none absolute bottom-[15%] left-1/2 -z-10 h-9 w-[62%] -translate-x-1/2 rounded-[50%] bg-ink/25 blur-2xl" />
 
-          {/* transparent products float directly on the hero — no card, no box */}
+          {/* transparent products float directly on the hero — no card, no
+              box — and tilt in 3D toward the cursor */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              x: imgX,
+              y: imgY,
+              rotateX: tiltX,
+              rotateY: tiltY,
+              transformStyle: "preserve-3d",
+            }}
             className="group relative h-full w-full"
           >
             <Image
@@ -280,7 +401,12 @@ export default function Hero() {
             />
           </motion.div>
 
-          {/* floating live widget cards — tucked into the empty bands */}
+          {/* floating live widget cards — tucked into the empty bands,
+              drifting opposite the cursor for depth */}
+          <motion.div
+            style={{ x: cardX, y: cardY }}
+            className="pointer-events-none absolute inset-0"
+          >
           <FloatCard className="left-0 top-[1%] sm:-left-4" delay="">
             <div className="flex items-center gap-3">
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-blue/15 text-blue">
@@ -340,6 +466,7 @@ export default function Hero() {
               </div>
             </div>
           </FloatCard>
+          </motion.div>
         </div>
       </div>
 

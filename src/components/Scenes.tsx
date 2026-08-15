@@ -4,17 +4,23 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Reveal from "./Reveal";
 import AnimatedHeading from "./AnimatedHeading";
+import {
+  LightsIcon,
+  FanIcon,
+  CurtainsIcon,
+  ClimateIcon,
+  SecurityIcon,
+} from "./icons";
 
-// The stage plays /living-room.mp4 (real room animation) in four equal
-// segments — one per scene. Picking a scene seeks its segment; playback
-// auto-advances through scenes like a guided tour.
+// Full-width interactive room: /living-room.mp4 plays in four equal
+// segments — one per scene. The scene controls sit on the image itself,
+// and live device state floats over the room as glass chips.
 type Scene = {
   id: string;
   label: string;
   icon: string;
   caption: string;
-  stats: { lights: string; curtain: string; climate: string; security: string };
-  actions: string[];
+  stats: { lights: string; curtain: string; fan: string; climate: string; security: string };
 };
 
 const SCENES: Scene[] = [
@@ -23,76 +29,69 @@ const SCENES: Scene[] = [
     label: "Morning",
     icon: "☀",
     caption: "Curtains glide open and lights fade up — the room eases you into the day.",
-    stats: { lights: "60%", curtain: "Open", climate: "23°C", security: "Disarmed" },
-    actions: [
-      "Curtains drawn fully open",
-      "Bedroom lights fade up to 60%",
-      "Geyser & coffee maker on",
-      "Climate set to 23°C",
-    ],
+    stats: { lights: "60%", curtain: "Open", fan: "Low", climate: "23°C", security: "Disarmed" },
   },
   {
     id: "movie",
     label: "Movie Night",
     icon: "🎬",
     caption: "Lights dim, curtains close, the sound bar wakes — instant cinema.",
-    stats: { lights: "15%", curtain: "Closed", climate: "22°C", security: "Disarmed" },
-    actions: [
-      "Curtains drawn closed",
-      "Ceiling lights off, cove lights 15%",
-      "TV & sound bar powered on",
-      "Do-not-disturb enabled",
-    ],
+    stats: { lights: "15%", curtain: "Closed", fan: "Silent", climate: "22°C", security: "Disarmed" },
   },
   {
     id: "goodnight",
     label: "Goodnight",
     icon: "🌙",
     caption: "One tap locks the doors and puts the whole home to sleep.",
-    stats: { lights: "Off", curtain: "Closed", climate: "Sleep", security: "Armed" },
-    actions: [
-      "All lights off except pathway",
-      "Doors locked, alarm armed",
-      "Climate to sleep curve",
-      "Energy-saver mode on",
-    ],
+    stats: { lights: "Off", curtain: "Closed", fan: "Off", climate: "Sleep", security: "Armed" },
   },
   {
     id: "away",
     label: "Away",
     icon: "🏃",
     caption: "Everything powers down and the house keeps watch while you're out.",
-    stats: { lights: "Off", curtain: "Half", climate: "Eco", security: "Armed" },
-    actions: [
-      "Everything powered down",
-      "Security cameras armed",
-      "Presence simulation enabled",
-      "Leak & smoke alerts active",
-    ],
+    stats: { lights: "Off", curtain: "Half", fan: "Off", climate: "Eco", security: "Armed" },
   },
 ];
 
-function StatChip({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-line bg-bg-soft px-3 py-2.5">
-      <p className="text-[10px] font-medium uppercase tracking-wider text-muted">
-        {label}
-      </p>
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={value}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.22 }}
-          className="font-display mt-0.5 text-sm font-bold"
-        >
-          {value}
-        </motion.p>
-      </AnimatePresence>
-    </div>
-  );
-}
+// Device chips anchored to spots in the room (percent-based positions).
+const DEVICES = [
+  {
+    key: "lights" as const,
+    label: "Lights",
+    Icon: LightsIcon,
+    pos: { left: "14%", top: "24%" },
+    hideOnMobile: false,
+  },
+  {
+    key: "fan" as const,
+    label: "Fan",
+    Icon: FanIcon,
+    pos: { left: "46%", top: "12%" },
+    hideOnMobile: true,
+  },
+  {
+    key: "curtain" as const,
+    label: "Curtains",
+    Icon: CurtainsIcon,
+    pos: { left: "84%", top: "26%" },
+    hideOnMobile: false,
+  },
+  {
+    key: "climate" as const,
+    label: "Climate",
+    Icon: ClimateIcon,
+    pos: { left: "12%", top: "62%" },
+    hideOnMobile: true,
+  },
+  {
+    key: "security" as const,
+    label: "Security",
+    Icon: SecurityIcon,
+    pos: { left: "86%", top: "64%" },
+    hideOnMobile: false,
+  },
+];
 
 export default function Scenes() {
   const [active, setActive] = useState(0);
@@ -150,176 +149,171 @@ export default function Scenes() {
   }, []);
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-28">
-      <Reveal>
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-violet">
-          One tap, whole-home
-        </p>
-      </Reveal>
-      <AnimatedHeading
-        text="Scenes that set the moment"
-        className="font-display mt-3 max-w-2xl text-4xl font-bold sm:text-5xl"
-      />
-      <Reveal delay={0.1}>
-        <p className="mt-4 max-w-2xl text-muted">
-          A scene is one tap that moves your whole home together — lights,
-          curtains, climate and security. Pick a scene below and watch the living
-          room respond in real time.
-        </p>
-      </Reveal>
+    <section className="w-full py-28">
+      <div className="mx-auto mb-12 max-w-7xl px-6">
+        <Reveal>
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-violet">
+            One tap, whole-home
+          </p>
+        </Reveal>
+        <AnimatedHeading
+          text="Scenes that set the moment"
+          className="font-display mt-3 max-w-2xl text-4xl font-bold sm:text-5xl"
+        />
+        <Reveal delay={0.1}>
+          <p className="mt-4 max-w-2xl text-muted">
+            A scene is one tap that moves your whole home together. Tap a scene
+            on the room below — every device answers, and its live state floats
+            right on the picture.
+          </p>
+        </Reveal>
+      </div>
 
-      <div className="mt-12 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-        {/* ── Left: live room video stage ───────────────────── */}
-        <div>
-          <div className="card-shadow group relative h-[420px] overflow-hidden rounded-3xl border border-line bg-black">
-            <video
-              ref={videoRef}
-              src="/living-room.mp4"
-              muted
-              playsInline
-              preload="metadata"
-              onTimeUpdate={onTimeUpdate}
-              onEnded={onEnded}
-              className="h-full w-full object-cover"
-            />
-            {/* legibility vignette */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-black/25" />
+      {/* ── Full-width interactive room stage ─────────────────── */}
+      <div className="mx-auto w-[94vw] lg:w-[min(1240px,92vw)]">
+        <div className="card-shadow relative h-[440px] overflow-hidden rounded-3xl border border-line bg-black sm:h-[540px] lg:h-[620px]">
+          <video
+            ref={videoRef}
+            src="/living-room.mp4"
+            muted
+            playsInline
+            preload="metadata"
+            onTimeUpdate={onTimeUpdate}
+            onEnded={onEnded}
+            className="h-full w-full object-cover"
+          />
+          {/* legibility vignette */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-black/25" />
 
-            {/* labels */}
-            <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
-              <span>{s.icon}</span>
-              <span>Living room · {s.label}</span>
-            </div>
-            <div className="absolute right-5 top-5 flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#1fd18a]" />
-              Live preview
-            </div>
+          {/* top labels */}
+          <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
+            <span>{s.icon}</span>
+            <span>Living room · {s.label}</span>
+          </div>
+          <div className="absolute right-5 top-5 flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#1fd18a]" />
+            Live preview
+          </div>
 
-            {/* animated caption card */}
-            <div className="absolute inset-x-5 bottom-16 sm:inset-x-auto sm:right-8 sm:bottom-16 sm:w-80">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={s.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  className="rounded-2xl border border-white/15 bg-white/10 p-5 text-center backdrop-blur-md"
-                >
-                  <p className="font-display text-xl font-semibold text-white">
-                    {s.icon} {s.label}
-                  </p>
-                  <p className="mt-1.5 text-sm font-light italic leading-snug text-white/85">
-                    {s.caption}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* segment progress + replay */}
-            <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3">
-              <button
-                onClick={() => seekTo(active)}
-                aria-label="Replay this scene"
-                className="grid h-8 w-8 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+          {/* device state chips pinned on the room */}
+          {DEVICES.map((d, i) => (
+            <motion.div
+              key={d.key}
+              initial={{ opacity: 0, scale: 0.7 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 + i * 0.12, duration: 0.5 }}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 ${
+                d.hideOnMobile ? "hidden sm:block" : ""
+              }`}
+              style={d.pos}
+            >
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 3.6 + i * 0.5,
+                  ease: "easeInOut",
+                }}
+                className="group flex items-center gap-2.5 rounded-full border border-white/20 bg-white/12 py-1.5 pl-1.5 pr-3.5 backdrop-blur-md transition hover:bg-white/20"
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                <span className="relative grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white">
+                  <span className="absolute inset-0 rounded-full bg-white/20 opacity-60 [animation:ping_2.6s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                  <d.Icon className="relative h-4.5 w-4.5" />
+                </span>
+                <span className="leading-tight">
+                  <span className="block text-[9px] font-medium uppercase tracking-wider text-white/70">
+                    {d.label}
+                  </span>
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={s.stats[d.key]}
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.25 }}
+                      className="block text-xs font-bold text-white"
+                    >
+                      {s.stats[d.key]}
+                    </motion.span>
+                  </AnimatePresence>
+                </span>
+              </motion.div>
+            </motion.div>
+          ))}
+
+          {/* animated caption card */}
+          <div className="pointer-events-none absolute inset-x-5 bottom-24 flex justify-center sm:bottom-28">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={s.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="max-w-md rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-center backdrop-blur-md"
+              >
+                <p className="text-sm font-light italic leading-snug text-white/90 sm:text-base">
+                  {s.caption}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* scene controls on the image */}
+          <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-2 px-4 sm:gap-3">
+            <button
+              onClick={() => seekTo(active)}
+              aria-label="Replay this scene"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/20 bg-white/12 text-white backdrop-blur-md transition hover:bg-white/25"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+            </button>
+
+            <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/35 p-1.5 backdrop-blur-md sm:gap-2">
+              {SCENES.map((sc, i) => (
+                <button
+                  key={sc.id}
+                  onClick={() => seekTo(i)}
+                  aria-pressed={active === i}
+                  aria-label={`Play ${sc.label} scene`}
+                  className={`relative flex items-center gap-2 overflow-hidden rounded-full px-3 py-2 text-sm transition-all duration-300 sm:px-4 ${
+                    active === i
+                      ? "bg-white/20 text-white"
+                      : "text-white/70 hover:bg-white/10 hover:text-white"
+                  }`}
                 >
-                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                  <path d="M3 3v5h5" />
-                </svg>
-              </button>
-              <div className="flex items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur">
-                {SCENES.map((sc, i) => (
-                  <button
-                    key={sc.id}
-                    onClick={() => seekTo(i)}
-                    aria-label={`Play ${sc.label} scene`}
-                    className="relative h-2 overflow-hidden rounded-full bg-white/25 transition-all duration-300"
-                    style={{ width: active === i ? 40 : 8 }}
+                  <span className="text-base">{sc.icon}</span>
+                  <span
+                    className={`whitespace-nowrap text-xs font-semibold sm:text-sm ${
+                      active === i ? "" : "hidden md:inline"
+                    }`}
                   >
-                    {active === i && (
+                    {sc.label}
+                  </span>
+                  {active === i && (
+                    <span className="absolute inset-x-2 bottom-0.5 h-0.5 overflow-hidden rounded-full bg-white/25">
                       <span
-                        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-violet to-blue"
+                        className="block h-full rounded-full bg-gradient-to-r from-violet to-blue"
                         style={{ width: `${progress * 100}%` }}
                       />
-                    )}
-                  </button>
-                ))}
-              </div>
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
-          </div>
-
-          {/* live home state */}
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <StatChip label="Lights" value={s.stats.lights} />
-            <StatChip label="Curtains" value={s.stats.curtain} />
-            <StatChip label="Climate" value={s.stats.climate} />
-            <StatChip label="Security" value={s.stats.security} />
-          </div>
-        </div>
-
-        {/* ── Right: scene picker + what happens ─────────────── */}
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted">
-            Tap a scene
-          </p>
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            {SCENES.map((sc, i) => (
-              <button
-                key={sc.id}
-                onClick={() => seekTo(i)}
-                aria-pressed={active === i}
-                className={`card-shadow flex items-center gap-3 rounded-2xl border p-4 text-left transition ${
-                  active === i
-                    ? "border-transparent bg-cta text-cta-fg"
-                    : "border-line bg-panel text-text hover:bg-bg-soft"
-                }`}
-              >
-                <span className="text-xl">{sc.icon}</span>
-                <span className="text-sm font-semibold">{sc.label}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="card-shadow mt-5 rounded-2xl border border-line bg-panel p-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted">
-              What happens when you tap “{s.label}”
-            </p>
-            <ul className="mt-4 space-y-3">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={s.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  {s.actions.map((a, i) => (
-                    <motion.li
-                      key={a}
-                      initial={{ opacity: 0, x: -12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.08 }}
-                      className="flex items-start gap-3 text-sm"
-                    >
-                      <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-violet/12 text-[11px] text-violet">
-                        ✓
-                      </span>
-                      <span className="text-muted">{a}</span>
-                    </motion.li>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-            </ul>
           </div>
         </div>
       </div>

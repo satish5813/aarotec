@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
+import Clients from "@/components/Clients";
 import Products from "@/components/Products";
 import Lifestyle from "@/components/Lifestyle";
 import FeatureReel from "@/components/FeatureReel";
@@ -21,6 +22,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Marquee />
+      <Clients />
       <Products />
       <Lifestyle />
       <FeatureReel />

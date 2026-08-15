@@ -31,49 +31,20 @@ const INSTALLS = [
 
 const QUOTES = [
   {
-    q: "Retrofitting was painless — no rewiring, no mess. The goodnight scene alone is worth it.",
-    n: "Vikram S.",
-    r: "Villa · Visakhapatnam",
+    q: "Using Whitelion has made daily life much more convenient. The touch panels look premium, the app control works smoothly, and the automation scenes are really useful. Integration with Alexa and Google Assistant is seamless. Overall, a great smart home experience with a modern feel.",
+    n: "Vishal .D",
   },
   {
-    q: "Energy insights helped us cut our monthly bill noticeably. Support has been excellent.",
-    n: "Meera & Arjun",
-    r: "Apartment · Khammam",
+    q: "I’ve been using Whitelion System’s home automation products in my office, and the quality is truly impressive. The controls work flawlessly, and the luxury wall finish gives the space a premium, modern look.",
+    n: "Kartik Kukadiya",
   },
   {
-    q: "We automated the common areas across the block — lighting and security run themselves now.",
-    n: "Lakshmi P.",
-    r: "Gated community · Vijayawada",
+    q: "I never expected home automation will be this good, thanks a lot for the WHITELION and making our home secured and anesthetic. And thanks a lot Technical Consultant @ Mr. Vishal for good coordination.",
+    n: "PRANAYSAI UPPU",
   },
   {
-    q: "Even when the Wi-Fi drops, the switches keep working. That reliability sold me.",
-    n: "Suresh K.",
-    r: "Individual house · Ongole",
-  },
-  {
-    q: "Installed room by room over a weekend. The touch panels look stunning on the wall.",
-    n: "Divya R.",
-    r: "Apartment · Chilakaluripet (AP)",
-  },
-  {
-    q: "Controlling fans, lights and the AC from one panel is so convenient. The whole family loves it.",
-    n: "Naveen M.",
-    r: "Apartment · Kakinada",
-  },
-  {
-    q: "Both floors on a single app. Scenes for movie night and mornings are a game changer.",
-    n: "Harika S.",
-    r: "Duplex · Guntur",
-  },
-  {
-    q: "Scheduling lights and ACs across the office cut our power costs significantly.",
-    n: "Sai Teja",
-    r: "Commercial office · Vijayawada",
-  },
-  {
-    q: "Ambience presets for day and evening transformed the space. Setup was effortless.",
-    n: "Coastal Brew Café",
-    r: "Cafeteria · Visakhapatnam",
+    q: "I’ve been using the Whitelion Touch Switch for a while, and I’m genuinely impressed by its performance and sleek design. The capacitive touch response is smooth and highly accurate, offering a premium feel every time. It works flawlessly with both IR remotes and smartphone control, making it ideal for modern smart homes.",
+    n: "Prabhatkumar Yadav",
   },
 ];
 
@@ -146,7 +117,7 @@ export default function Gallery() {
             </p>
           </Reveal>
           <AnimatedHeading
-            text="Hear from our customers"
+            text="Customer Reviews"
             className="font-display mt-3 max-w-2xl text-4xl font-bold sm:text-5xl"
           />
         </div>
@@ -173,19 +144,12 @@ export default function Gallery() {
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-violet to-blue text-sm font-semibold text-white">
                   {t.n[0]}
                 </span>
-                <div>
-                  <div className="text-sm font-semibold">{t.n}</div>
-                  <div className="text-xs text-muted">{t.r}</div>
-                </div>
+                <div className="text-sm font-semibold">{t.n}</div>
               </figcaption>
             </figure>
           ))}
         </motion.div>
       </div>
-      <p className="mt-6 text-center text-xs text-muted">
-        Sample testimonials shown for demonstration.
-      </p>
-
       {/* lightbox */}
       {active !== null && (
         <motion.div

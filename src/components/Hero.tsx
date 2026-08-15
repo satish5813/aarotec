@@ -101,18 +101,18 @@ export default function Hero() {
             {...fade(0.08)}
             className="font-display mt-5 text-[2.6rem] font-bold leading-[1.02] tracking-[-0.03em] text-text sm:mt-6 sm:text-6xl lg:text-[5.1rem]"
           >
-            Welcome Home,
+            Smart Homes That
             <br />
-            <span className="text-glow">Smarter Than Ever.</span>
+            <span className="text-glow">Feel Effortless.</span>
           </motion.h1>
 
           <motion.p
             {...fade(0.16)}
             className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted sm:mt-7 sm:text-lg lg:mx-0"
           >
-            At Aaro Tec, we transform ordinary spaces into intelligent living
-            environments with smart automation solutions tailored to your needs
-            — without rewiring and without complexity.
+            Create a home that responds to the way you live. From lighting and
+            climate to security and entertainment, Aaro Tec brings every smart
+            experience together through beautifully integrated automation.
           </motion.p>
 
           <motion.div
@@ -127,13 +127,13 @@ export default function Hero() {
                 className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"
                 aria-hidden
               />
-              Explore the range
+              Explore Smart Living
               <span className="transition-transform group-hover:translate-x-1">
                 →
               </span>
             </a>
             <a
-              href="#ecosystem"
+              href="#contact"
               className="glass card-shadow group inline-flex w-full items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-sm font-semibold text-text transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
             >
               <span className="grid h-7 w-7 place-items-center rounded-full btn-grad text-white">
@@ -146,28 +146,8 @@ export default function Hero() {
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </span>
-              See it in action
+              Book a Free Demo
             </a>
-          </motion.div>
-
-          <motion.div
-            {...fade(0.27)}
-            className="mt-7 flex justify-center lg:justify-start"
-          >
-            <div className="glass card-shadow inline-flex flex-col items-center gap-x-5 gap-y-1.5 rounded-2xl px-6 py-4 sm:flex-row">
-              <span className="text-sm text-muted">
-                Transform your home with Aaro Tec smart solutions
-              </span>
-              <span className="hidden h-8 w-px bg-line sm:block" />
-              <span className="flex items-baseline gap-2 whitespace-nowrap">
-                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                  Starting at
-                </span>
-                <span className="font-display text-3xl font-bold leading-none text-glow sm:text-4xl">
-                  ₹39,999
-                </span>
-              </span>
-            </div>
           </motion.div>
 
           <motion.div

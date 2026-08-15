@@ -96,7 +96,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
 export default function Stats() {
   return (
-    <section className="relative overflow-hidden border-y border-line bg-bg-soft py-24">
+    <section id="about" className="relative overflow-hidden border-y border-line bg-bg-soft py-24">
       <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-72 w-240 -translate-x-1/2 rounded-full bg-violet/5 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl px-6">

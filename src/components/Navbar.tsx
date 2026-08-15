@@ -5,12 +5,11 @@ import LogoMark from "./Logo";
 import { selectProduct } from "./productStore";
 
 const LINKS = [
+  { label: "About Us", href: "#about" },
   { label: "Products", href: "#products" },
   { label: "Ecosystem", href: "#ecosystem" },
-  { label: "Smart Lock", href: "#smart-lock" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Why us", href: "#why" },
-  { label: "Contact", href: "#contact" },
+  { label: "Why Us", href: "#why" },
+  { label: "Contact Us", href: "#contact" },
 ];
 
 export default function Navbar() {

@@ -49,11 +49,11 @@ export default function AppShowcase() {
               className="ml-auto w-[86%]"
             >
               <Image
-                src="/TAB.jpg"
+                src="/products/app-tablet.png"
                 alt="Aaro Tec app on a tablet — Hall dashboard with switches, fans and scenes"
-                width={1228}
-                height={1600}
-                className="h-auto w-full rounded-[1.9rem] shadow-[0_30px_70px_-30px_rgba(15,21,43,0.45)] ring-1 ring-line"
+                width={1100}
+                height={1433}
+                className="h-auto w-full drop-shadow-[0_34px_45px_rgba(15,21,43,0.35)]"
               />
             </motion.div>
 
@@ -65,11 +65,11 @@ export default function AppShowcase() {
               className="absolute -bottom-2 left-0 w-[42%] sm:w-[40%]"
             >
               <Image
-                src="/MOBILE.jpg"
+                src="/products/app-phone.png"
                 alt="Aaro Tec app on a phone — Living Room switches and dimmers"
                 width={660}
                 height={1346}
-                className="h-auto w-full rounded-[2rem] shadow-[0_34px_70px_-28px_rgba(15,21,43,0.55)] ring-1 ring-line"
+                className="h-auto w-full drop-shadow-[0_30px_40px_rgba(15,21,43,0.45)]"
               />
             </motion.div>
           </div>

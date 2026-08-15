@@ -23,8 +23,8 @@ export const PRODUCTS: Product[] = [
     desc: "Smart touch panels with an elegant design and precise control.",
     long: "Posh brings a refined glass face to everyday control — lights, fans and scenes respond to a single, satisfying touch, online or off.",
     variants: [
-      { color: "#000000", src: `${CDN}/PoshBlack.png` },
-      { color: "#EFEFEF", src: `${CDN}/PoshWhite.png` },
+      { color: "#000000", src: "/products/posh-panel.png" },
+      { color: "#33333d", src: "/products/posh-scene.png" },
     ],
     highlights: ["Capacitive glass touch", "Local + app control", "7-year warranty"],
     features: [
@@ -50,8 +50,8 @@ export const PRODUCTS: Product[] = [
     desc: "Frameless toughened-glass panels with a stunning modern aesthetic.",
     long: "Quartz removes the frame entirely — an edge-to-edge sheet of toughened glass that sits almost flush with the wall for a clean, architectural look.",
     variants: [
-      { color: "#000000", src: `${CDN}/QuartzBlack.png` },
-      { color: "#EFEFEF", src: `${CDN}/QuartzWhite.png` },
+      { color: "#000000", src: "/products/quartz-4sc.png" },
+      { color: "#33333d", src: "/products/quartz-8fp.png" },
     ],
     highlights: ["Frameless glass", "Slim profile", "Local + app control"],
     features: [
@@ -104,8 +104,9 @@ export const PRODUCTS: Product[] = [
     desc: "Premium glass panels with master control and smart features.",
     long: "AirGlass is the master panel — a premium glass surface that orchestrates lights, fans, curtains and scenes across the entire home from one place.",
     variants: [
-      { color: "#000000", src: `${CDN}/AirGlassBlack.png` },
-      { color: "#EFEFEF", src: `${CDN}/AirGlassWhite.png` },
+      { color: "#000000", src: "/products/airglass-black.jpg" },
+      { color: "#EFEFEF", src: "/products/airglass-white.jpg" },
+      { color: "#33333d", src: "/products/airglass-scene.png" },
     ],
     highlights: ["Master control", "Premium glass", "Whole-home scenes"],
     features: [
@@ -122,6 +123,30 @@ export const PRODUCTS: Product[] = [
       { k: "Finish", v: "Premium toughened glass" },
       { k: "Install", v: "Standard modular back-box" },
       { k: "Warranty", v: "7 years" },
+    ],
+  },
+  {
+    slug: "aircurtain",
+    name: "AirCurtain",
+    tagline: "Curtains That Move With Your Day.",
+    desc: "Silent motorized curtain track with app, voice and scene control.",
+    long: "AirCurtain glides your curtains open with the sunrise and closed for movie night — silently, on schedule, from the app or a single touch on any panel.",
+    variants: [{ color: "#f4f4f5", src: "/products/aircurtain.png" }],
+    highlights: ["Whisper-quiet motor", "App & voice control", "Scene ready"],
+    features: [
+      { title: "Whisper-quiet glide", desc: "A smooth, silent motor that never interrupts the room." },
+      { title: "Tap to move", desc: "A gentle tug or a single tap starts the glide." },
+      { title: "In your scenes", desc: "Opens with Morning, closes for Movie Night — automatically." },
+      { title: "Voice ready", desc: "Works with Alexa and Google Assistant." },
+      { title: "Precise position", desc: "Stop at any point — 30%, half, or fully drawn." },
+      { title: "Fits your window", desc: "Track cut to size for straight and curved runs." },
+    ],
+    specs: [
+      { k: "Motor", v: "Silent DC motor" },
+      { k: "Control", v: "App, voice, panel & manual tug" },
+      { k: "Connectivity", v: "Wi-Fi 2.4GHz + RF mesh" },
+      { k: "Track", v: "Custom-cut aluminium" },
+      { k: "Warranty", v: "2 years" },
     ],
   },
   {
@@ -178,7 +203,7 @@ export const PRODUCTS: Product[] = [
     tagline: "Your Home, Smarter & Safer.",
     desc: "All-in-one app for smart home control and security.",
     long: "AirHome is the single control surface for the entire ecosystem — rooms, scenes, schedules, energy and security, in your pocket.",
-    variants: [{ color: "#2f6bff", src: `${CDN}/AirHome.png` }],
+    variants: [{ color: "#2f6bff", src: "/products/app-phone.png" }],
     highlights: ["One app", "Remote access", "Family sharing"],
     features: [
       { title: "Whole-home view", desc: "Every room, device and scene in one place." },
@@ -202,7 +227,13 @@ export const PRODUCTS: Product[] = [
     tagline: "Smart Security, Seamless Living.",
     desc: "5-in-1 smart lock — fingerprint, passcode, RFID, key and app access.",
     long: "AirLock secures the front door five ways and keeps a clear log of every entry — convenient for the family, controlled for you.",
-    variants: [{ color: "#1c1f27", src: `${CDN}/AirLockB1.png` }],
+    variants: [
+      { color: "#1c1f27", src: "/products/airlock-2.png" },
+      { color: "#000000", src: "/products/airlock-3.png" },
+      { color: "#4b5163", src: "/products/airlock-1.png" },
+      { color: "#2e3442", src: "/products/zeswin-core.png" },
+      { color: "#6b7280", src: "/products/zeswin-shield.png" },
+    ],
     highlights: ["5-in-1 access", "Entry log", "App unlock"],
     features: [
       { title: "Fingerprint", desc: "Fast, secure biometric unlock." },
@@ -226,7 +257,10 @@ export const PRODUCTS: Product[] = [
     tagline: "Enhance Every Smart Moment.",
     desc: "Smart add-ons for seamless home automation.",
     long: "A range of modules and add-ons that complete the system — extend, adapt and finish any installation cleanly.",
-    variants: [{ color: "#0e1117", src: `${CDN}/Accessories.png` }],
+    variants: [
+      { color: "#0e1117", src: "/products/accessory-wifi-2.jpg" },
+      { color: "#33333d", src: "/products/accessory-wifi-1.jpg" },
+    ],
     highlights: ["Modular", "Plug & play", "System-wide"],
     features: [
       { title: "Gang modules", desc: "Expand control to more loads and rooms." },

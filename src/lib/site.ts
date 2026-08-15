@@ -19,8 +19,7 @@ export const BUSINESS = {
   region: "Telangana",
   country: "IN",
   // A representative image used for social-share previews.
-  ogImage:
-    "https://whitelion-assets.blr1.cdn.digitaloceanspaces.com/website/home/products/AirGlassBlack.png",
+  ogImage: `${SITE_URL}/products/airglass-black.jpg`,
   // Official brand logo (full lockup) — used for JSON-LD Organization data.
   logo: `${SITE_URL}/newaarotec.jpeg`,
 } as const;

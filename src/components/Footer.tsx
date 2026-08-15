@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const COLS = [
-  { h: "Products", links: ["Posh", "Quartz", "AirTouch", "AirGlass", "AirLock"] },
+  { h: "Products", links: ["Posh", "Quartz", "AirGlass", "AirCurtain", "AirLock"] },
   { h: "Company", links: ["About", "Careers", "Blog", "Press"] },
   { h: "Support", links: ["Help center", "Installation", "Warranty", "Contact"] },
 ];

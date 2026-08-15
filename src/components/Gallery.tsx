@@ -8,6 +8,11 @@ import AnimatedHeading from "./AnimatedHeading";
 
 // Real installation photos from homes across India, curated best-first.
 const INSTALLS = [
+  { src: "/products/mocha-room.jpg", caption: "Mocha panel in a wood-panelled living room" },
+  { src: "/products/mocha-lamp.jpg", caption: "Warm corners, smarter switches" },
+  { src: "/products/mocha-wood.jpg", caption: "Flush fit in fluted wood" },
+  { src: "/products/mocha-shelf.jpg", caption: "Design that disappears into the decor" },
+  { src: "/products/mocha-touch.jpg", caption: "One touch on the Mocha panel" },
   { src: "/lock-keypad.jpeg", caption: "Fingerprint, PIN & RFID access" },
   { src: "/lock-display.jpeg", caption: "Smart display, one-touch open" },
   { src: "/lock-handle.jpeg", caption: "Premium matte-black lever" },

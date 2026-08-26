@@ -35,6 +35,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...except the production site URL, which is public and must reach the build
+!.env.production
+!.env.development
 
 # vercel
 .vercel

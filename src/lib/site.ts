@@ -1,10 +1,39 @@
 // Single source of truth for site-wide metadata, used by layout metadata,
 // sitemap, robots, JSON-LD structured data and the lead API.
+//
+// This module is server-only (imported by layout/metadata/robots/sitemap), so
+// it may read non-public Vercel env vars.
 
-// Set NEXT_PUBLIC_SITE_URL in your environment (e.g. https://aarohanainfratech.com)
-// for production. Falls back to localhost in development.
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
+/** The live production domain. Used as the last-resort fallback so a build can
+ *  never ship canonical/OG tags pointing at localhost. */
+const PRODUCTION_URL = "https://www.aarotec.in";
+
+const strip = (u: string) => u.replace(/\/+$/, "");
+
+function resolveSiteUrl(): string {
+  // 1. Explicit override — set this in .env.local (dev) and in the Vercel
+  //    project's Environment Variables (production/preview).
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicit) return strip(explicit);
+
+  // 2. Vercel: the stable production domain of the project (no protocol).
+  const vercelProd = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (vercelProd && process.env.VERCEL_ENV === "production") {
+    return strip(`https://${vercelProd}`);
+  }
+
+  // 3. Vercel: the per-deployment URL (preview deploys).
+  const vercelUrl = process.env.VERCEL_URL?.trim();
+  if (vercelUrl) return strip(`https://${vercelUrl}`);
+
+  // 4. Local development only.
+  if (process.env.NODE_ENV !== "production") return "http://localhost:3000";
+
+  // 5. Any other production build — never localhost.
+  return PRODUCTION_URL;
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 export const BUSINESS = {
   name: "Aaro Tec",
@@ -18,7 +47,7 @@ export const BUSINESS = {
   city: "Hyderabad",
   region: "Telangana",
   country: "IN",
-  // A representative image used for social-share previews.
+  // A representative image used for social-share previews (absolute URL).
   ogImage: `${SITE_URL}/products/airglass-black.jpg`,
   // Official brand logo (full lockup) — used for JSON-LD Organization data.
   logo: `${SITE_URL}/newaarotec.jpeg`,

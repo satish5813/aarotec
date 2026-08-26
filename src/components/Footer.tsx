@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const COLS = [
   { h: "Products", links: ["Posh", "Quartz", "AirGlass", "AirCurtain", "AirLock"] },
@@ -95,12 +96,12 @@ export default function Footer() {
             reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-text">
+            <Link href="/privacy-policy" className="hover:text-text">
               Privacy
-            </a>
-            <a href="#" className="hover:text-text">
+            </Link>
+            <Link href="/terms" className="hover:text-text">
               Terms
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -43,6 +43,9 @@ export const BUSINESS = {
     "Aaro Tec designs intelligent touch panels and a connected home ecosystem. Control lights, fans, curtains and climate with a single, beautiful interface.",
   phone: "+91 83090 47843",
   phoneHref: "+918309047843",
+  // Mailbox used for privacy / data-deletion requests. Meta reviews this
+  // address when approving Lead Ads, so it must actually receive mail.
+  email: "privacy@aarotec.in",
   contactPerson: "Pradeep",
   city: "Hyderabad",
   region: "Telangana",
@@ -52,3 +55,7 @@ export const BUSINESS = {
   // Official brand logo (full lockup) — used for JSON-LD Organization data.
   logo: `${SITE_URL}/newaarotec.jpeg`,
 } as const;
+
+/** Shown on the Privacy Policy and Terms pages. Update whenever either
+ *  document changes materially. */
+export const LEGAL_LAST_UPDATED = "26 August 2026";

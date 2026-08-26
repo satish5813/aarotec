@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import LogoMark from "./Logo";
 import { selectProduct } from "./productStore";
 
@@ -16,11 +18,20 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
+  const pathname = usePathname();
+  const onHome = pathname === "/";
+
+  // The nav points at sections of the home page. Away from home (product and
+  // legal pages) those bare "#id" links resolve to nothing, so send the
+  // visitor back to the home page at that section instead.
+  const hrefFor = (hash: string) => (onHome ? hash : `/${hash}`);
 
   // Clicking the brand always returns to the top of the home page and resets
   // any in-page state (e.g. the selected product), so it behaves like "Home".
   const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.button !== 0) return;
+    // Off the home page, let the browser follow the href and actually navigate.
+    if (!onHome) return;
     e.preventDefault();
     setOpen(false);
     selectProduct("posh");
@@ -64,7 +75,7 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a
+        <Link
           href="/"
           onClick={goHome}
           aria-label="Aaro Tec — back to home"
@@ -82,7 +93,7 @@ export default function Navbar() {
               Transforming spaces &amp; enhancing lives
             </span>
           </span>
-        </a>
+        </Link>
 
         <div className="hidden items-center gap-9 md:flex">
           {LINKS.map((l) => {
@@ -90,7 +101,7 @@ export default function Navbar() {
             return (
               <a
                 key={l.href}
-                href={l.href}
+                href={hrefFor(l.href)}
                 aria-current={isActive ? "true" : undefined}
                 className={`group relative text-sm font-medium transition-colors duration-300 ${
                   isActive ? "text-text" : "text-muted hover:text-text"
@@ -109,7 +120,7 @@ export default function Navbar() {
 
         <div className="hidden md:block">
           <a
-            href="#contact"
+            href={hrefFor("#contact")}
             className="rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-cta-fg shadow-[0_10px_24px_-12px_rgba(22,20,15,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_rgba(22,20,15,0.55)]"
           >
             Book a demo
@@ -142,7 +153,7 @@ export default function Navbar() {
           {LINKS.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              href={hrefFor(l.href)}
               onClick={() => setOpen(false)}
               aria-current={active === l.href ? "true" : undefined}
               className={`block py-3 transition-colors ${
@@ -155,7 +166,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#contact"
+            href={hrefFor("#contact")}
             onClick={() => setOpen(false)}
             className="mt-2 block rounded-full bg-cta px-5 py-2.5 text-center text-sm font-semibold text-cta-fg"
           >

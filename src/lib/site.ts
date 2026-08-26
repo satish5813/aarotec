@@ -59,3 +59,25 @@ export const BUSINESS = {
 /** Shown on the Privacy Policy and Terms pages. Update whenever either
  *  document changes materially. */
 export const LEGAL_LAST_UPDATED = "26 August 2026";
+
+/** Cities we actively sell and install in, plus nationwide coverage. Used for
+ *  the areaServed property of the LocalBusiness structured data. */
+export const AREAS_SERVED = [
+  "Hyderabad",
+  "Vijayawada",
+  "Visakhapatnam",
+  "Guntur",
+  "Nellore",
+  "Tirupati",
+  "Rajahmundry",
+  "Kakinada",
+] as const;
+
+/** Official profiles on other platforms. Only add a URL that is genuinely the
+ *  business's own profile — sameAs is how search engines reconcile identity. */
+export const SAME_AS = [
+  "https://www.linkedin.com/in/pradeep-ravulapati-investments",
+] as const;
+
+/** Longest warranty offered, in years. Surfaced in structured data. */
+export const WARRANTY_YEARS = 7;

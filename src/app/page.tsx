@@ -13,7 +13,6 @@ import Stats from "@/components/Stats";
 import Why from "@/components/Why";
 import Gallery from "@/components/Gallery";
 import Testimonials from "@/components/Testimonials";
-import TestimonialsJsonLd from "@/components/TestimonialsJsonLd";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -36,7 +35,6 @@ export default function Home() {
       <Why />
       <Gallery />
       <Testimonials />
-      <TestimonialsJsonLd />
       <FAQ />
       <Contact />
       <Footer />

@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
+import LocalBusinessJsonLd from "@/components/LocalBusinessJsonLd";
 import { SITE_URL, BUSINESS } from "@/lib/site";
 
 const inter = Inter({
@@ -69,30 +70,6 @@ export const metadata: Metadata = {
   },
 };
 
-const orgJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: BUSINESS.name,
-  legalName: BUSINESS.legalName,
-  url: SITE_URL,
-  description: BUSINESS.description,
-  logo: BUSINESS.logo,
-  telephone: BUSINESS.phone,
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: BUSINESS.city,
-    addressRegion: BUSINESS.region,
-    addressCountry: BUSINESS.country,
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: BUSINESS.phone,
-    contactType: "sales",
-    areaServed: "IN",
-    availableLanguage: ["en", "hi", "te"],
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -104,10 +81,7 @@ export default function RootLayout({
       className={`${inter.variable} ${display.variable} ${serif.variable} antialiased`}
     >
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
-        />
+        <LocalBusinessJsonLd />
         <SmoothScroll>{children}</SmoothScroll>
         <Analytics />
       </body>

@@ -1,12 +1,43 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PRODUCTS } from "@/lib/products";
 
-const COLS = [
-  { h: "Products", links: ["Posh", "Quartz", "AirGlass", "AirCurtain", "AirLock"] },
-  { h: "Company", links: ["About", "Careers", "Blog", "Press"] },
-  { h: "Support", links: ["Help center", "Installation", "Warranty", "Contact"] },
+// Products shown in the footer, in this order. Names come from the product
+// data so a rename can never leave the footer out of step.
+const FOOTER_PRODUCTS = ["posh", "quartz", "airglass", "aircurtain", "airlock"];
+
+type FooterLink = { label: string; href: string };
+
+const productLinks: FooterLink[] = FOOTER_PRODUCTS.flatMap((slug) => {
+  const product = PRODUCTS.find((p) => p.slug === slug);
+  return product ? [{ label: product.name, href: `/products/${slug}` }] : [];
+});
+
+// Every entry points at something that exists. Careers, Blog and Press were
+// removed rather than stubbed out — an empty page is worse than no link.
+const COLS: { h: string; links: FooterLink[] }[] = [
+  { h: "Products", links: productLinks },
+  {
+    h: "Company",
+    links: [
+      { label: "About", href: "/#about" },
+      { label: "Why Aaro Tec", href: "/#why" },
+      { label: "Gallery", href: "/#gallery" },
+    ],
+  },
+  {
+    h: "Support",
+    links: [
+      { label: "Help center", href: "/#faq" },
+      { label: "Installation", href: "/terms#installation" },
+      { label: "Warranty", href: "/terms#warranty" },
+      { label: "Contact", href: "/#contact" },
+    ],
+  },
 ];
 
+// Only profiles with a real URL are rendered — set the href and the icon
+// comes back. Placeholder "#" icons look broken and go nowhere.
 const SOCIALS = [
   {
     label: "LinkedIn",
@@ -48,7 +79,7 @@ export default function Footer() {
               for the modern home.
             </p>
             <div className="mt-6 flex gap-3">
-              {SOCIALS.map((s) => (
+              {SOCIALS.filter((s) => s.href !== "#").map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
@@ -76,13 +107,13 @@ export default function Footer() {
               <h4 className="text-sm font-semibold">{c.h}</h4>
               <ul className="mt-4 space-y-3">
                 {c.links.map((l) => (
-                  <li key={l}>
-                    <a
-                      href="#"
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
                       className="text-sm text-muted transition hover:text-text"
                     >
-                      {l}
-                    </a>
+                      {l.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

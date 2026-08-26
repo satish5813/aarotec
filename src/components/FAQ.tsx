@@ -36,7 +36,7 @@ export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-28">
+    <section id="faq" className="mx-auto max-w-3xl px-6 py-28">
       <Reveal>
         <p className="text-center text-sm font-medium uppercase tracking-[0.2em] text-violet">
           Questions

@@ -45,25 +45,6 @@ const FILTERS: { key: Category; label: string }[] = [
 
 const SLIDE_MS = 5200;
 
-const QUOTES = [
-  {
-    q: "Using Whitelion has made daily life much more convenient. The touch panels look premium, the app control works smoothly, and the automation scenes are really useful. Integration with Alexa and Google Assistant is seamless. Overall, a great smart home experience with a modern feel.",
-    n: "Vishal .D",
-  },
-  {
-    q: "I’ve been using Whitelion System’s home automation products in my office, and the quality is truly impressive. The controls work flawlessly, and the luxury wall finish gives the space a premium, modern look.",
-    n: "Kartik Kukadiya",
-  },
-  {
-    q: "I never expected home automation will be this good, thanks a lot for the WHITELION and making our home secured and anesthetic. And thanks a lot Technical Consultant @ Mr. Vishal for good coordination.",
-    n: "PRANAYSAI UPPU",
-  },
-  {
-    q: "I’ve been using the Whitelion Touch Switch for a while, and I’m genuinely impressed by its performance and sleek design. The capacitive touch response is smooth and highly accurate, offering a premium feel every time. It works flawlessly with both IR remotes and smartphone control, making it ideal for modern smart homes.",
-    n: "Prabhatkumar Yadav",
-  },
-];
-
 export default function Gallery() {
   const [cat, setCat] = useState<Category>("all");
   const [index, setIndex] = useState(0);
@@ -73,7 +54,6 @@ export default function Gallery() {
   const stageRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const row = [...QUOTES, ...QUOTES];
 
   const shots = useMemo(
     () => (cat === "all" ? SHOTS : SHOTS.filter((s) => s.cat === cat)),
@@ -348,49 +328,6 @@ export default function Gallery() {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="mx-auto max-w-7xl px-6">
-        {/* testimonials */}
-        <div className="mt-20">
-          <Reveal>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-amber">
-              Loved at home
-            </p>
-          </Reveal>
-          <AnimatedHeading
-            text="Customer Reviews"
-            className="font-display mt-3 max-w-2xl text-4xl font-bold sm:text-5xl"
-          />
-        </div>
-      </div>
-
-      <div className="relative mt-12 overflow-hidden pb-28">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-bg-soft to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-bg-soft to-transparent" />
-        <motion.div
-          className="flex gap-5"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, duration: 36, ease: "linear" }}
-        >
-          {row.map((t, i) => (
-            <figure
-              key={i}
-              className="card-shadow w-[340px] shrink-0 rounded-3xl border border-line bg-panel p-7"
-            >
-              <div className="text-amber">★★★★★</div>
-              <blockquote className="mt-4 text-sm leading-relaxed text-text">
-                “{t.q}”
-              </blockquote>
-              <figcaption className="mt-6 flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-violet to-blue text-sm font-semibold text-white">
-                  {t.n[0]}
-                </span>
-                <div className="text-sm font-semibold">{t.n}</div>
-              </figcaption>
-            </figure>
-          ))}
-        </motion.div>
       </div>
 
       {/* lightbox */}

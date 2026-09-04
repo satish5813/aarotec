@@ -8,8 +8,13 @@ Sheet via a Google Apps Script Web App. Follow these steps once.
 1. Go to <https://sheets.google.com> and create a new spreadsheet, e.g. **"Aarohana Leads"**.
 2. In row 1, add these headers (exact order):
 
-   | Timestamp | Name | Email | Phone | City | Source |
-   |-----------|------|-------|-------|------|--------|
+   | Timestamp | Name | Email | Phone | City | Interest | Product | Message | Source |
+   |-----------|------|-------|-------|------|----------|---------|---------|--------|
+
+   *Interest* is `smart-home` for the main site form, and `power`, `furniture`
+   or `both` for enquiries from the Power Backup and Furniture pages. *Product*
+   and *Message* are filled by those pages when a visitor enquires about a
+   specific piece or unit.
 
 ## 2. Add the Apps Script
 
@@ -27,6 +32,9 @@ Sheet via a Google Apps Script Web App. Follow these steps once.
          data.email || "",
          data.phone || "",
          data.city || "",
+         data.interest || "smart-home",
+         data.product || "",
+         data.message || "",
          data.source || "",
        ]);
        return ContentService

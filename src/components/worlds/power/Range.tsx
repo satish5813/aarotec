@@ -76,7 +76,7 @@ export default function Range() {
               className={`group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-line bg-panel transition-shadow duration-500 hover:shadow-[0_40px_70px_-40px_rgba(15,21,18,0.45)] ${wide ? "xl:col-span-2 xl:flex-row" : ""}`}
             >
               {p.badge && (
-                <span className="absolute left-5 top-5 z-10 rounded-full bg-accent-2 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#0f1512]">{p.badge}</span>
+                <span className="absolute left-5 top-5 z-10 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent-fg">{p.badge}</span>
               )}
               <Link href={`/power/${p.slug}`} className={`relative block aspect-[4/3] overflow-hidden bg-white ${wide ? "xl:aspect-auto xl:w-1/2" : ""}`}>
                 <Image

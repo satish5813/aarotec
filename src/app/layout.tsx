@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Inter,
-  Space_Grotesk,
-  Fraunces,
-  Syne,
-  Cormorant_Garamond,
-  JetBrains_Mono,
-} from "next/font/google";
+import { Inter, Space_Grotesk, Fraunces, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -34,23 +27,7 @@ const serif = Fraunces({
   display: "swap",
 });
 
-// Faces used only inside the Power and Furniture worlds. next/font emits the
-// @font-face rules globally but browsers fetch a face only when it's used.
-const worldDisplay = Syne({
-  variable: "--font-world-display",
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  display: "swap",
-});
-
-const worldSerif = Cormorant_Garamond({
-  variable: "--font-world-serif",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
+// Mono face for spec numbers on the Power and Furniture pages.
 const mono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
@@ -112,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${display.variable} ${serif.variable} ${worldDisplay.variable} ${worldSerif.variable} ${mono.variable} antialiased`}
+      className={`${inter.variable} ${display.variable} ${serif.variable} ${mono.variable} antialiased`}
     >
       <body>
         <LocalBusinessJsonLd />

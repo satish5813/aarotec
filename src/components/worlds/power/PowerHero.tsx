@@ -74,7 +74,7 @@ export default function PowerHero() {
         mx.set(0.5);
         my.set(0.5);
       }}
-      className="relative isolate overflow-hidden pt-28 sm:pt-32"
+      className="relative isolate overflow-hidden bg-bg pt-28 sm:pt-32"
     >
       {/* Engineering grid that fades toward the edges */}
       <div
@@ -131,23 +131,28 @@ export default function PowerHero() {
           </motion.dl>
         </motion.div>
 
-        {/* Stage */}
-        <motion.div style={{ y: prodY }} className="relative mx-auto w-full max-w-[560px] lg:max-w-none">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 40 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.35, ease: EASE }}
-            style={{ x: px, y: py, rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
-            className="cutout relative aspect-square"
-          >
-            <Image
-              src="/power/delta-3-1.webp"
-              alt="DELTA 3 portable power station"
-              fill
-              preload
-              sizes="(max-width: 1024px) 90vw, 45vw"
-              className="object-contain"
-            />
+        {/* Stage. The product is a white-background photo blended with
+            multiply; the blend must sit on the OUTERMOST transformed wrapper,
+            because every transform below it would isolate the blend from the
+            page. The chips therefore live in a sibling layer. */}
+        <div className="relative mx-auto w-full max-w-[560px] lg:max-w-none">
+          <motion.div style={{ y: prodY }} className="cutout relative aspect-square">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 40 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.35, ease: EASE }}
+              style={{ x: px, y: py, rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src="/power/delta-3-1.webp"
+                alt="DELTA 3 portable power station"
+                fill
+                preload
+                sizes="(max-width: 1024px) 90vw, 45vw"
+                className="object-contain"
+              />
+            </motion.div>
           </motion.div>
 
           {/* Floating chips */}
@@ -171,7 +176,7 @@ export default function PowerHero() {
               <p className="mt-1.5 text-[11px] text-muted">{pct >= 100 ? "Ready for the next outage" : "X-Stream fast charge"}</p>
             </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

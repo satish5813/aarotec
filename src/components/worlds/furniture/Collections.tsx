@@ -98,7 +98,7 @@ export default function Collections() {
                   <div data-img className="absolute inset-[-10%]">
                     <Image src={c.hero} alt={`${c.name} collection`} fill sizes="(max-width: 1024px) 85vw, 60vw" className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-panel via-panel/40 to-transparent" />
                 </div>
 
                 <div className="relative p-7 sm:p-9 lg:absolute lg:inset-x-0 lg:bottom-0 lg:flex lg:items-end lg:justify-between lg:gap-10 lg:p-12">

@@ -56,7 +56,7 @@ export default function PowerDetail({ product, related }: { product: PowerProduc
                 </motion.div>
               </AnimatePresence>
               {product.badge && (
-                <span className="absolute left-5 top-5 rounded-full bg-accent-2 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#0f1512]">{product.badge}</span>
+                <span className="absolute left-5 top-5 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent-fg">{product.badge}</span>
               )}
             </div>
             <div className="mt-4 grid grid-cols-4 gap-3">

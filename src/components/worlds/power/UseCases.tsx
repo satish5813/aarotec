@@ -42,7 +42,7 @@ export default function UseCases() {
   const videoY = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
 
   return (
-    <section id="use-cases" ref={ref} className="relative isolate overflow-hidden bg-[#0b0f0d] py-24 text-white sm:py-32">
+    <section id="use-cases" ref={ref} className="relative isolate overflow-hidden bg-ink py-24 text-white sm:py-32">
       {/* Cinematic backdrop */}
       <motion.div style={{ y: videoY }} className="absolute inset-[-12%_0] -z-10">
         <video
@@ -57,7 +57,7 @@ export default function UseCases() {
           <source src="/power/hero.mp4" type="video/mp4" />
         </video>
       </motion.div>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#0b0f0d] via-[#0b0f0d]/60 to-[#0b0f0d]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-ink via-ink/60 to-ink" />
 
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <div className="max-w-2xl">

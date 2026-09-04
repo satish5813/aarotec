@@ -120,7 +120,7 @@ export default function Contact({
                 animate={{ opacity: 1, y: 0 }}
                 className="flex h-full min-h-[320px] flex-col items-center justify-center text-center"
               >
-                <span className="grid h-16 w-16 place-items-center rounded-full bg-accent-2 text-[#0f1512]">
+                <span className="grid h-16 w-16 place-items-center rounded-full bg-accent text-accent-fg">
                   <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
                 </span>
                 <h3 className="font-display mt-6 text-2xl font-bold">Received — thank you.</h3>

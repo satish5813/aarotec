@@ -89,7 +89,7 @@ export default function Technology() {
         {/* Sticky visual */}
         <div className="hidden lg:block">
           <div className="sticky top-28">
-            <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-line bg-[#0d1210] shadow-[0_50px_90px_-50px_rgba(15,21,18,0.6)]">
+            <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-line bg-ink shadow-[0_50px_90px_-50px_rgba(15,21,18,0.6)]">
               <AnimatePresence mode="sync">
                 <motion.div
                   key={active}

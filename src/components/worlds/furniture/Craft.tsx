@@ -43,8 +43,8 @@ export default function Craft() {
               />
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/70 to-transparent p-6 pt-20">
                 <div>
-                  <p className="label text-hi">Finish</p>
-                  <p className="font-serif text-3xl font-medium">{f.name}</p>
+                  <p className="label text-white/70">Finish</p>
+                  <p className="font-serif text-3xl font-medium text-white">{f.name}</p>
                 </div>
                 <p className="text-xs text-white/60">Preview is indicative</p>
               </div>

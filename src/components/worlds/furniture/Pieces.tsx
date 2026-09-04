@@ -79,8 +79,8 @@ export default function Pieces() {
                   <Image src={p.images[0]} alt={p.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-0" />
                   <Image src={p.images[1] ?? p.images[0]} alt="" aria-hidden fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover opacity-0 transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-100" />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5 pt-16">
-                    <p className="label text-hi">{COLLECTIONS[p.collection].name} · {CATEGORIES.find((c) => c.key === p.category)?.label}</p>
-                    <h3 className="font-serif mt-1 text-2xl font-medium">{p.name}</h3>
+                    <p className="label text-white/70">{COLLECTIONS[p.collection].name} · {CATEGORIES.find((c) => c.key === p.category)?.label}</p>
+                    <h3 className="font-serif mt-1 text-2xl font-medium text-white">{p.name}</h3>
                   </div>
                   <span className="absolute right-4 top-4 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-white/80 backdrop-blur">
                     Shown in {p.shownIn}

@@ -9,6 +9,12 @@ import { EASE, Reveal, Words } from "@/components/worlds/shared/motion";
 
 export default function FurnitureDetail({ product, related }: { product: FurnitureProduct; related: FurnitureProduct[] }) {
   const [idx, setIdx] = useState(0);
+  // Selected stain. null = as photographed. The preview tints the photo with
+  // a colour-blend overlay: wood takes the hue, the dark studio backdrop
+  // stays dark, so it reads as the same piece in a different finish.
+  const [finish, setFinish] = useState<number | null>(null);
+  const tint = finish === null ? null : FINISHES[finish];
+  const isCharcoal = tint?.name === "Charcoal";
   const c = COLLECTIONS[product.collection];
   const cat = CATEGORIES.find((k) => k.key === product.category)?.label;
 
@@ -39,7 +45,25 @@ export default function FurnitureDetail({ product, related }: { product: Furnitu
                   <Image src={product.images[idx]} alt={`${product.name} — view ${idx + 1}`} fill preload={idx === 0} sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
                 </motion.div>
               </AnimatePresence>
-              <span className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/40 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/80 backdrop-blur">Shown in {product.shownIn}</span>
+              {/* Finish preview overlays */}
+              <AnimatePresence>
+                {tint && (
+                  <motion.div
+                    key={tint.name}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: EASE }}
+                    className="pointer-events-none absolute inset-0"
+                  >
+                    <div className="absolute inset-0 mix-blend-color" style={{ background: tint.hex, opacity: isCharcoal ? 0.9 : 0.75 }} />
+                    <div className="absolute inset-0 mix-blend-multiply" style={{ background: tint.hex, opacity: isCharcoal ? 0.55 : 0.28 }} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <span className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/40 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/80 backdrop-blur">
+                {tint ? `Previewing in ${tint.name} · indicative` : `Shown in ${product.shownIn}`}
+              </span>
             </div>
             <div className="mt-4 grid grid-cols-5 gap-3">
               {product.images.map((src, i) => (
@@ -78,15 +102,37 @@ export default function FurnitureDetail({ product, related }: { product: Furnitu
 
             <Reveal delay={0.2}>
               <div className="mt-6">
-                <p className="label text-muted">Finishes</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {FINISHES.map((f) => (
-                    <span key={f.name} className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-3 text-xs">
-                      <span className="h-5 w-5 rounded-full" style={{ background: `linear-gradient(135deg, ${f.hex}, color-mix(in srgb, ${f.hex} 70%, black))` }} />
-                      {f.name}
-                    </span>
-                  ))}
+                <div className="flex items-baseline justify-between gap-4">
+                  <p className="label text-muted">Finishes · tap to preview</p>
+                  {tint && (
+                    <button onClick={() => setFinish(null)} className="text-xs text-muted underline-offset-4 hover:text-text hover:underline">
+                      Reset to photo
+                    </button>
+                  )}
                 </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {FINISHES.map((f, i) => {
+                    const active = finish === i;
+                    return (
+                      <button
+                        key={f.name}
+                        type="button"
+                        onClick={() => setFinish(active ? null : i)}
+                        aria-pressed={active}
+                        className={`group flex items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-xs transition-all ${
+                          active ? "border-accent bg-accent/10 text-text shadow-[0_0_0_3px_var(--glow)]" : "border-line text-muted hover:border-text hover:text-text"
+                        }`}
+                      >
+                        <span
+                          className="h-5 w-5 rounded-full ring-1 ring-black/10 transition-transform group-hover:scale-110"
+                          style={{ background: `linear-gradient(135deg, ${f.hex}, color-mix(in srgb, ${f.hex} 70%, black))` }}
+                        />
+                        {f.name}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="mt-2 text-[11px] text-muted">Colour preview is indicative. We send photographs of the real stain before you confirm.</p>
               </div>
             </Reveal>
 
@@ -140,7 +186,7 @@ export default function FurnitureDetail({ product, related }: { product: Furnitu
               <Link key={r.slug} href={`/furniture/${r.slug}`} className="group relative aspect-[4/3] overflow-hidden rounded-[1.5rem] border border-line">
                 <Image src={r.images[0]} alt={r.name} fill sizes="33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5 pt-12">
-                  <p className="font-serif text-2xl font-medium">{r.name}</p>
+                  <p className="font-serif text-2xl font-medium text-white">{r.name}</p>
                 </div>
               </Link>
             ))}

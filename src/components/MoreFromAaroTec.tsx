@@ -103,7 +103,7 @@ export default function MoreFromAaroTec() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
-          className="grain group relative isolate overflow-hidden rounded-[2rem] border border-line"
+          className="group relative isolate overflow-hidden rounded-[2rem] border border-line bg-ink text-white"
         >
           <div className="absolute inset-0 -z-10">
             <Image
@@ -113,25 +113,25 @@ export default function MoreFromAaroTec() {
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/70 to-bg/10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/10" />
             <div className="vignette absolute inset-0" />
           </div>
           <Link href={WORLDS.furniture.href} className="flex min-h-[380px] flex-col p-7 sm:p-9">
-            <p className="label text-hi">{WORLDS.furniture.eyebrow}</p>
+            <p className="label text-sky">{WORLDS.furniture.eyebrow}</p>
             <h3 className="font-serif mt-3 text-5xl font-medium leading-[0.95] sm:text-6xl">
               Live with
               <br />
-              <em className="brass not-italic">sculpture.</em>
+              <em className="brand-text not-italic">sculpture.</em>
             </h3>
-            <p className="mt-4 max-w-xs text-sm text-muted">{WORLDS.furniture.blurb}</p>
+            <p className="mt-4 max-w-xs text-sm text-white/70">{WORLDS.furniture.blurb}</p>
             <div className="mt-6 flex flex-wrap gap-2">
               {furniturePicks.map((p) => (
-                <span key={p.slug} className="rounded-full border border-line bg-panel/60 px-3 py-1 text-xs font-medium">
+                <span key={p.slug} className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium">
                   {p.name}
                 </span>
               ))}
             </div>
-            <span className="mt-auto inline-flex w-fit items-center gap-2 pt-8 text-sm font-semibold text-accent">
+            <span className="mt-auto inline-flex w-fit items-center gap-2 pt-8 text-sm font-semibold text-white">
               Explore the collections
               <svg viewBox="0 0 24 24" className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </span>

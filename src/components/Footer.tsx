@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/products";
+import { WORLDS } from "@/lib/site";
 
 // Products shown in the footer, in this order. Names come from the product
 // data so a rename can never leave the footer out of step.
@@ -16,7 +17,16 @@ const productLinks: FooterLink[] = FOOTER_PRODUCTS.flatMap((slug) => {
 // Every entry points at something that exists. Careers, Blog and Press were
 // removed rather than stubbed out — an empty page is worse than no link.
 const COLS: { h: string; links: FooterLink[] }[] = [
-  { h: "Products", links: productLinks },
+  { h: "Smart home", links: productLinks },
+  {
+    h: "Also from Aaro Tec",
+    links: [
+      { label: WORLDS.power.label, href: WORLDS.power.href },
+      { label: "RIVER & DELTA range", href: `${WORLDS.power.href}#range` },
+      { label: WORLDS.furniture.label, href: WORLDS.furniture.href },
+      { label: "Furniture collections", href: `${WORLDS.furniture.href}#collections` },
+    ],
+  },
   {
     h: "Company",
     links: [
@@ -65,14 +75,14 @@ export default function Footer() {
   return (
     <footer className="border-t border-line bg-bg-soft">
       <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div>
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+          <div className="md:col-span-2 lg:col-span-1">
             <Image
               src="/aaro-lockup.png"
               alt="Aaro Tec — Smart Homes That Feel Effortless"
               width={785}
               height={561}
-              className="h-auto w-44"
+              className="footer-lockup h-auto w-44"
             />
             <p className="mt-4 max-w-xs text-sm text-muted">
               Transforming spaces and enhancing lives — intelligent automation

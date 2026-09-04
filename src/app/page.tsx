@@ -12,6 +12,7 @@ import AppShowcase from "@/components/AppShowcase";
 import Stats from "@/components/Stats";
 import Why from "@/components/Why";
 import Gallery from "@/components/Gallery";
+import MoreFromAaroTec from "@/components/MoreFromAaroTec";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
@@ -34,6 +35,7 @@ export default function Home() {
       <Stats />
       <Why />
       <Gallery />
+      <MoreFromAaroTec />
       <Testimonials />
       <FAQ />
       <Contact />

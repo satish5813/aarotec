@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import LogoMark from "./Logo";
 import { selectProduct } from "./productStore";
+import { WORLDS } from "@/lib/site";
 
 const LINKS = [
   { label: "About Us", href: "#about" },
@@ -12,6 +13,13 @@ const LINKS = [
   { label: "Ecosystem", href: "#ecosystem" },
   { label: "Why Us", href: "#why" },
   { label: "Contact Us", href: "#contact" },
+];
+
+// Dedicated product worlds published under Aaro Tec — real pages, not
+// home-page sections, so they sit apart from the anchor links above.
+const PAGES = [
+  { label: WORLDS.power.label, href: WORLDS.power.href },
+  { label: WORLDS.furniture.label, href: WORLDS.furniture.href },
 ];
 
 export default function Navbar() {
@@ -116,6 +124,17 @@ export default function Navbar() {
               </a>
             );
           })}
+          <span className="hidden h-4 w-px bg-line lg:block" aria-hidden="true" />
+          {PAGES.map((p) => (
+            <Link
+              key={p.href}
+              href={p.href}
+              className="group relative hidden text-sm font-medium text-muted transition-colors duration-300 hover:text-text lg:block"
+            >
+              {p.label}
+              <span className="absolute -bottom-1.5 left-0 h-0.5 w-0 rounded-full bg-gradient-to-r from-amber to-violet transition-all duration-300 ease-out group-hover:w-full" />
+            </Link>
+          ))}
         </div>
 
         <div className="hidden md:block">
@@ -165,6 +184,18 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
+          <div className="mt-2 grid grid-cols-2 gap-2 border-t border-line pt-3">
+            {PAGES.map((p) => (
+              <Link
+                key={p.href}
+                href={p.href}
+                onClick={() => setOpen(false)}
+                className="rounded-2xl border border-line px-4 py-3 text-center text-sm font-semibold text-text"
+              >
+                {p.label}
+              </Link>
+            ))}
+          </div>
           <a
             href={hrefFor("#contact")}
             onClick={() => setOpen(false)}

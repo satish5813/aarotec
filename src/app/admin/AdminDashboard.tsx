@@ -19,7 +19,7 @@ export default function AdminDashboard({
     const q = query.trim().toLowerCase();
     if (!q) return leads;
     return leads.filter((l) =>
-      [l.name, l.email, l.phone, l.city, l.source]
+      [l.name, l.email, l.phone, l.city, l.source, l.interest, l.product, l.message]
         .join(" ")
         .toLowerCase()
         .includes(q)
@@ -42,13 +42,16 @@ export default function AdminDashboard({
   }
 
   function exportCsv() {
-    const header = ["ID", "Name", "Email", "Phone", "City", "Source", "User Agent", "Created At"];
+    const header = ["ID", "Name", "Email", "Phone", "City", "Interest", "Product", "Message", "Source", "User Agent", "Created At"];
     const rows = filtered.map((l) => [
       l.id,
       l.name,
       l.email,
       l.phone,
       l.city,
+      l.interest,
+      l.product,
+      l.message,
       l.source,
       l.userAgent,
       l.createdAt,
@@ -102,7 +105,7 @@ export default function AdminDashboard({
             <table style={table}>
               <thead>
                 <tr>
-                  {["#", "Name", "Email", "Phone", "City", "Source", "Received", ""].map(
+                  {["#", "Name", "Email", "Phone", "City", "Enquiry", "Source", "Received", ""].map(
                     (h) => (
                       <th key={h} style={th}>
                         {h}
@@ -127,6 +130,15 @@ export default function AdminDashboard({
                       </a>
                     </td>
                     <td style={td}>{l.city}</td>
+                    <td style={{ ...td, maxWidth: 260 }}>
+                      <span style={{ fontWeight: 600, textTransform: "capitalize" }}>{l.interest || "smart-home"}</span>
+                      {l.product && <span style={{ color: "#9fb0cc" }}> · {l.product}</span>}
+                      {l.message && (
+                        <div title={l.message} style={{ ...truncate, display: "block", color: "#9fb0cc", fontSize: 12 }}>
+                          {l.message}
+                        </div>
+                      )}
+                    </td>
                     <td style={{ ...td, maxWidth: 220 }}>
                       <span title={l.source} style={truncate}>
                         {l.source}

@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, Fraunces } from "next/font/google";
+import {
+  Inter,
+  Space_Grotesk,
+  Fraunces,
+  Syne,
+  Cormorant_Garamond,
+  JetBrains_Mono,
+} from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -27,6 +34,30 @@ const serif = Fraunces({
   display: "swap",
 });
 
+// Faces used only inside the Power and Furniture worlds. next/font emits the
+// @font-face rules globally but browsers fetch a face only when it's used.
+const worldDisplay = Syne({
+  variable: "--font-world-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  display: "swap",
+});
+
+const worldSerif = Cormorant_Garamond({
+  variable: "--font-world-serif",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+});
+
 const TITLE = `${BUSINESS.name} — ${BUSINESS.tagline}`;
 
 export const metadata: Metadata = {
@@ -44,6 +75,9 @@ export const metadata: Metadata = {
     "home automation",
     "smart switches India",
     "Aaro Tec",
+    "portable power station",
+    "home power backup",
+    "solid wood furniture",
   ],
   alternates: {
     canonical: "/",
@@ -78,7 +112,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${display.variable} ${serif.variable} antialiased`}
+      className={`${inter.variable} ${display.variable} ${serif.variable} ${worldDisplay.variable} ${worldSerif.variable} ${mono.variable} antialiased`}
     >
       <body>
         <LocalBusinessJsonLd />

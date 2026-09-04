@@ -47,6 +47,8 @@ export const BUSINESS = {
   // address when approving Lead Ads, so it must actually receive mail.
   email: "privacy@aarotec.in",
   contactPerson: "Pradeep",
+  whatsapp:
+    "https://wa.me/918309047843?text=Hi%20Pradeep%2C%20I%27d%20like%20to%20know%20more%20about%20Aaro%20Tec",
   city: "Hyderabad",
   region: "Telangana",
   country: "IN",
@@ -81,3 +83,21 @@ export const SAME_AS = [
 
 /** Longest warranty offered, in years. Surfaced in structured data. */
 export const WARRANTY_YEARS = 7;
+
+/** The two dedicated product worlds published under Aaro Tec, each with its
+ *  own visual identity. Used by the navbar, the home "services" section, the
+ *  footer and structured data. */
+export const WORLDS = {
+  power: {
+    href: "/power",
+    label: "Power Backup",
+    eyebrow: "Portable power stations",
+    blurb: "Silent, fume-free backup that recharges in an hour and runs for years.",
+  },
+  furniture: {
+    href: "/furniture",
+    label: "Furniture",
+    eyebrow: "Sculptural solid-wood furniture",
+    blurb: "Architect-designed pieces in ash wood, stained in seven finishes, made to order.",
+  },
+} as const;

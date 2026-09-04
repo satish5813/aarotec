@@ -17,6 +17,13 @@ export type Lead = {
   city: string;
   source: string;
   userAgent: string;
+  /** Which offering the enquiry is about: smart-home (default), power,
+   *  furniture or both. */
+  interest: string;
+  /** Specific product the visitor was looking at, if any. */
+  product: string;
+  /** Free-text message from the Power/Furniture enquiry forms. */
+  message: string;
   createdAt: string; // ISO 8601
 };
 
@@ -43,16 +50,35 @@ export function db(): Database.Database {
     );
     CREATE INDEX IF NOT EXISTS idx_leads_createdAt ON leads (createdAt DESC);
   `);
+  // Columns added for the Power / Furniture enquiry forms. SQLite has no
+  // ADD COLUMN IF NOT EXISTS, so check the existing schema first.
+  const cols = new Set(
+    (database.prepare(`PRAGMA table_info(leads)`).all() as { name: string }[]).map((c) => c.name)
+  );
+  for (const col of ["interest", "product", "message"]) {
+    if (!cols.has(col)) {
+      database.exec(`ALTER TABLE leads ADD COLUMN ${col} TEXT NOT NULL DEFAULT ''`);
+    }
+  }
   _db = database;
   return database;
 }
 
-export function insertLead(lead: Omit<Lead, "id" | "createdAt">): Lead {
+export function insertLead(
+  input: Omit<Lead, "id" | "createdAt" | "interest" | "product" | "message"> &
+    Partial<Pick<Lead, "interest" | "product" | "message">>
+): Lead {
   const createdAt = new Date().toISOString();
+  const lead = {
+    interest: "smart-home",
+    product: "",
+    message: "",
+    ...input,
+  };
   const info = db()
     .prepare(
-      `INSERT INTO leads (name, email, phone, city, source, userAgent, createdAt)
-       VALUES (@name, @email, @phone, @city, @source, @userAgent, @createdAt)`
+      `INSERT INTO leads (name, email, phone, city, source, userAgent, interest, product, message, createdAt)
+       VALUES (@name, @email, @phone, @city, @source, @userAgent, @interest, @product, @message, @createdAt)`
     )
     .run({ ...lead, createdAt });
   return { id: Number(info.lastInsertRowid), createdAt, ...lead };

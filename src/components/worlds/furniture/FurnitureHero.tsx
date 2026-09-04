@@ -1,27 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
-import dynamic from "next/dynamic";
-import Image from "next/image";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import CanvasErrorBoundary from "@/components/three/CanvasErrorBoundary";
 import { EASE, Counter } from "@/components/worlds/shared/motion";
 import { FINISHES } from "@/data/furniture";
-
-// The scene is client-only: R3F can't SSR and the placeholder keeps the hero
-// composed while the renderer boots.
-const FurnitureScene = dynamic(() => import("./three/FurnitureScene"), {
-  ssr: false,
-  loading: () => <Placeholder />,
-});
-
-function Placeholder() {
-  return (
-    <div className="relative h-full w-full">
-      <Image src="/furniture/loop-work-table-1.webp" alt="" fill sizes="50vw" className="rounded-[2rem] object-cover opacity-80" />
-    </div>
-  );
-}
+import Mosaic from "./Mosaic";
 
 function Line({ children, delay }: { children: React.ReactNode; delay: number }) {
   return (
@@ -35,8 +18,6 @@ function Line({ children, delay }: { children: React.ReactNode; delay: number })
 
 export default function FurnitureHero() {
   const ref = useRef<HTMLElement>(null);
-  const [finish, setFinish] = useState("Walnut");
-  const [ready, setReady] = useState(false);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const copyY = useTransform(scrollYProgress, [0, 1], [0, 90]);
@@ -52,7 +33,7 @@ export default function FurnitureHero() {
       <div className="pointer-events-none absolute right-[-15%] top-[5%] -z-10 h-[75vh] w-[65vw] rounded-full blur-3xl" style={{ background: "radial-gradient(closest-side, rgba(99,102,241,0.18), transparent 70%)" }} />
       <div className="pointer-events-none absolute left-[-10%] bottom-[-10%] -z-10 h-[50vh] w-[40vw] rounded-full blur-3xl" style={{ background: "radial-gradient(closest-side, rgba(6,182,212,0.14), transparent 70%)" }} />
 
-      <div className="mx-auto grid max-w-[1400px] items-center gap-8 px-5 pb-16 sm:px-8 lg:min-h-[calc(100vh-8rem)] lg:grid-cols-[0.95fr_1.05fr] lg:gap-4 lg:pb-20">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-8 px-5 pb-16 sm:px-8 lg:min-h-[calc(100vh-8rem)] lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pb-20">
         {/* Copy */}
         <motion.div style={{ y: copyY, opacity: copyO }} className="relative z-10">
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 1 }} className="label flex items-center gap-3 text-hi">
@@ -71,29 +52,22 @@ export default function FurnitureHero() {
             Six collections conceived by architects and hand-built by Indian artisans. Work tables, beds, storage and seating in stained ash — each piece made for you, in your finish, delivered anywhere in India.
           </motion.p>
 
-          {/* Live finish switch drives the 3D material */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.95, duration: 0.9, ease: EASE }} className="mt-8">
-            <p className="label text-muted">Stain it live</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {FINISHES.map((f) => {
-                const active = finish === f.name;
-                return (
-                  <button
-                    key={f.name}
-                    type="button"
-                    onClick={() => setFinish(f.name)}
-                    aria-pressed={active}
-                    className={`group flex items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-xs font-medium transition-all ${
-                      active ? "border-accent bg-panel text-text shadow-[0_0_0_3px_var(--glow)]" : "border-line bg-panel/60 text-muted hover:border-text hover:text-text"
-                    }`}
-                  >
-                    <span className="h-5 w-5 rounded-full ring-1 ring-black/10 transition-transform group-hover:scale-110" style={{ background: `linear-gradient(135deg, ${f.hex}, color-mix(in srgb, ${f.hex} 70%, black))` }} />
-                    {f.name}
-                  </button>
-                );
-              })}
-            </div>
-          </motion.div>
+          {/* Seven finishes, previewed live further down the page */}
+          <motion.a
+            href="#craft"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.95, duration: 0.9, ease: EASE }}
+            className="group mt-8 inline-flex items-center gap-4 rounded-full border border-line bg-panel/70 py-2 pl-2 pr-4 backdrop-blur transition-colors hover:border-text"
+          >
+            <span className="flex -space-x-1.5">
+              {FINISHES.map((f) => (
+                <span key={f.name} className="h-6 w-6 rounded-full ring-2 ring-panel" style={{ background: `linear-gradient(135deg, ${f.hex}, color-mix(in srgb, ${f.hex} 70%, black))` }} />
+              ))}
+            </span>
+            <span className="text-xs font-semibold">Seven stains · preview any piece</span>
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </motion.a>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.05, duration: 0.9, ease: EASE }} className="mt-8 flex flex-wrap gap-3">
             <a href="#collections" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-accent-fg shadow-[0_18px_40px_-18px_rgba(79,70,229,0.7)] transition-transform hover:-translate-y-0.5">
@@ -121,30 +95,9 @@ export default function FurnitureHero() {
           </motion.dl>
         </motion.div>
 
-        {/* 3D stage */}
+        {/* Living mosaic of the pieces */}
         <motion.div style={{ y: stageY }} className="relative">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.2, ease: EASE }}
-            className="relative h-[380px] w-full sm:h-[480px] lg:h-[640px]"
-          >
-            <CanvasErrorBoundary fallback={<Placeholder />}>
-              <FurnitureScene finish={finish} onReady={() => setReady(true)} />
-            </CanvasErrorBoundary>
-
-            {/* Finish read-out */}
-            <div className={`absolute left-4 top-4 rounded-2xl border border-line bg-panel/85 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.4)] backdrop-blur transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}>
-              <p className="label text-muted">Loop work table</p>
-              <p className="mt-1 flex items-center gap-2 font-serif text-2xl font-medium leading-none">
-                <span className="h-3.5 w-3.5 rounded-full ring-1 ring-black/10" style={{ background: FINISHES.find((f) => f.name === finish)?.hex }} />
-                {finish}
-              </p>
-            </div>
-            <p className={`absolute bottom-3 right-4 text-[11px] text-muted transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}>
-              <span className="hidden sm:inline">Move your cursor · </span>drawers open on their own
-            </p>
-          </motion.div>
+          <Mosaic />
         </motion.div>
       </div>
 

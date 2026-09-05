@@ -37,7 +37,7 @@ export default function LocalBusinessJsonLd() {
     description: "Smart touch panels, smart switches and home automation",
     url: SITE_URL,
     telephone: BUSINESS.phone,
-    email: BUSINESS.email,
+    email: BUSINESS.contactEmail,
     image: BUSINESS.ogImage,
     logo: BUSINESS.logo,
     address: {

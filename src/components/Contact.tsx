@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import Reveal from "./Reveal";
+import { BUSINESS } from "@/lib/site";
 
 const CITIES = [
   "Mumbai",
@@ -100,6 +101,25 @@ export default function Contact() {
                   <span className="block text-xs text-muted">Call us</span>
                   <span className="font-medium text-text transition-colors group-hover:text-blue">
                     +91 83090 47843
+                  </span>
+                </span>
+              </a>
+
+              {/* Email (clickable) */}
+              <a
+                href={`mailto:${BUSINESS.contactEmail}`}
+                className="group flex items-center gap-3"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line bg-bg-soft text-blue transition-colors group-hover:border-transparent group-hover:bg-gradient-to-br group-hover:from-violet group-hover:to-blue group-hover:text-white">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="h-4.5 w-4.5">
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <path d="m3 7 9 6 9-6" />
+                  </svg>
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-xs text-muted">Email us</span>
+                  <span className="block truncate font-medium text-text transition-colors group-hover:text-blue">
+                    {BUSINESS.contactEmail}
                   </span>
                 </span>
               </a>

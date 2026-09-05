@@ -46,6 +46,8 @@ export const BUSINESS = {
   // Mailbox used for privacy / data-deletion requests. Meta reviews this
   // address when approving Lead Ads, so it must actually receive mail.
   email: "privacy@aarotec.in",
+  // Public sales / enquiry mailbox shown in the contact section.
+  contactEmail: "aarohanainfrasolutions@gmail.com",
   contactPerson: "Pradeep",
   whatsapp:
     "https://wa.me/918309047843?text=Hi%20Pradeep%2C%20I%27d%20like%20to%20know%20more%20about%20Aaro%20Tec",

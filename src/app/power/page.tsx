@@ -10,6 +10,7 @@ import Runtime from "@/components/worlds/power/Runtime";
 import Technology from "@/components/worlds/power/Technology";
 import UseCases from "@/components/worlds/power/UseCases";
 import Assurance from "@/components/worlds/power/Assurance";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import { POWER_FAQ, POWER_PRODUCTS } from "@/data/power";
 import { SITE_URL, BUSINESS } from "@/lib/site";
 
@@ -45,6 +46,7 @@ export default function PowerPage() {
   return (
     <div data-world="power">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
+      <BreadcrumbJsonLd trail={[{ name: "Aaro Tec", path: "/" }, { name: "Power Backup", path: "/power" }]} />
       <WorldNavbar world="power" />
       <main>
         <PowerHero />

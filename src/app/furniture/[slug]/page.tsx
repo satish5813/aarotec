@@ -4,6 +4,7 @@ import WorldNavbar from "@/components/worlds/shared/Navbar";
 import Footer from "@/components/Footer";
 import Contact from "@/components/worlds/shared/Contact";
 import FurnitureDetail from "@/components/worlds/furniture/FurnitureDetail";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import { COLLECTIONS, FURNITURE_PRODUCTS, getFurnitureProduct } from "@/data/furniture";
 import { SITE_URL, BUSINESS } from "@/lib/site";
 
@@ -60,6 +61,7 @@ export default async function FurnitureProductPage({ params }: { params: Promise
   return (
     <div data-world="furniture">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <BreadcrumbJsonLd trail={[{ name: "Aaro Tec", path: "/" }, { name: "Furniture", path: "/furniture" }, { name: product.name, path: `/furniture/${product.slug}` }]} />
       <WorldNavbar world="furniture" />
       <main>
         <FurnitureDetail product={product} related={related} />

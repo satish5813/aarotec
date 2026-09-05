@@ -9,6 +9,7 @@ import Pieces from "@/components/worlds/furniture/Pieces";
 import Craft from "@/components/worlds/furniture/Craft";
 import Rooms from "@/components/worlds/furniture/Rooms";
 import Reviews from "@/components/worlds/furniture/Reviews";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import { FURNITURE_FAQ, FURNITURE_PRODUCTS } from "@/data/furniture";
 import { SITE_URL, BUSINESS } from "@/lib/site";
 
@@ -44,6 +45,7 @@ export default function FurniturePage() {
   return (
     <div data-world="furniture">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
+      <BreadcrumbJsonLd trail={[{ name: "Aaro Tec", path: "/" }, { name: "Furniture", path: "/furniture" }]} />
       <WorldNavbar world="furniture" />
       <main>
         <FurnitureHero />

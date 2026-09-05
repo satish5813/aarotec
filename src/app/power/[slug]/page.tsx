@@ -4,6 +4,7 @@ import WorldNavbar from "@/components/worlds/shared/Navbar";
 import Footer from "@/components/Footer";
 import Contact from "@/components/worlds/shared/Contact";
 import PowerDetail from "@/components/worlds/power/PowerDetail";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import { POWER_PRODUCTS, getPowerProduct } from "@/data/power";
 import { SITE_URL, BUSINESS } from "@/lib/site";
 
@@ -65,6 +66,7 @@ export default async function PowerProductPage({ params }: { params: Promise<{ s
   return (
     <div data-world="power">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <BreadcrumbJsonLd trail={[{ name: "Aaro Tec", path: "/" }, { name: "Power Backup", path: "/power" }, { name: product.name, path: `/power/${product.slug}` }]} />
       <WorldNavbar world="power" />
       <main>
         <PowerDetail product={product} related={related} />

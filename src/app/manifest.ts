@@ -1,0 +1,18 @@
+import type { MetadataRoute } from "next";
+import { BUSINESS } from "@/lib/site";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: BUSINESS.name,
+    short_name: BUSINESS.name,
+    description: BUSINESS.description,
+    start_url: "/",
+    display: "standalone",
+    background_color: "#f6f8fe",
+    theme_color: "#4f46e5",
+    icons: [
+      { src: "/icon.png", sizes: "512x512", type: "image/png" },
+      { src: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  };
+}

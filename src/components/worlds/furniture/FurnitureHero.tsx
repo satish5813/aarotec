@@ -33,7 +33,7 @@ export default function FurnitureHero() {
       <div className="pointer-events-none absolute right-[-15%] top-[5%] -z-10 h-[75vh] w-[65vw] rounded-full blur-3xl" style={{ background: "radial-gradient(closest-side, rgba(99,102,241,0.18), transparent 70%)" }} />
       <div className="pointer-events-none absolute left-[-10%] bottom-[-10%] -z-10 h-[50vh] w-[40vw] rounded-full blur-3xl" style={{ background: "radial-gradient(closest-side, rgba(6,182,212,0.14), transparent 70%)" }} />
 
-      <div className="mx-auto grid max-w-[1400px] items-center gap-8 px-5 pb-16 sm:px-8 lg:min-h-[calc(100vh-8rem)] lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pb-20">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-8 px-5 pb-16 sm:px-8 lg:min-h-[calc(100dvh-8rem)] lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:pb-20">
         {/* Copy */}
         <motion.div style={{ y: copyY, opacity: copyO }} className="relative z-10">
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 1 }} className="label flex items-center gap-3 text-hi">

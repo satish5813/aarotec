@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import Footer from "@/components/Footer";
 import ProductDetail from "@/components/ProductDetail";
 import { PRODUCTS, getProduct } from "@/lib/products";
@@ -75,6 +76,7 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
+      <BreadcrumbJsonLd trail={[{ name: "Aaro Tec", path: "/" }, { name: "Products", path: "/#products" }, { name: product.name, path: `/products/${product.slug}` }]} />
       <Navbar />
       <ProductDetail product={product} />
       <Footer />

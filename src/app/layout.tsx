@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk, Fraunces, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
@@ -79,6 +79,16 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
+  formatDetection: { telephone: true, email: true, address: false },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Lets the layout extend under the notch / home indicator on iPhones.
+  viewportFit: "cover",
+  themeColor: "#f6f8fe",
+  colorScheme: "light",
 };
 
 export default function RootLayout({

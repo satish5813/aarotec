@@ -84,7 +84,7 @@ export default function PowerHero() {
       {/* Volt glow behind the product */}
       <div className="pointer-events-none absolute right-[-10%] top-[10%] -z-10 h-[70vh] w-[60vw] rounded-full blur-3xl" style={{ background: "radial-gradient(closest-side, var(--glow), transparent 70%)" }} />
 
-      <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-5 pb-16 sm:px-8 lg:min-h-[calc(100vh-8rem)] lg:grid-cols-[1.05fr_1fr] lg:gap-6 lg:pb-24">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-5 pb-16 sm:px-8 lg:min-h-[calc(100dvh-8rem)] lg:grid-cols-[1.05fr_1fr] lg:gap-6 lg:pb-24">
         {/* Copy */}
         <motion.div style={{ opacity: copyOpacity, y: copyY }} className="relative z-10">
           <motion.p {...rise(0.1)} className="label flex items-center gap-3 text-hi">

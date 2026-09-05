@@ -550,3 +550,23 @@ html.lenis body {
     "g h i";
   aspect-ratio: 3 / 2.75;
 }
+
+/* ─── Cross-browser polish ────────────────────────────────────────── */
+/* iOS Safari: no grey flash on tap, no rubber-band bleed past the page */
+html {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+/* Safari needs the prefixed backdrop filter on older releases */
+.backdrop-blur,
+.backdrop-blur-xl {
+  -webkit-backdrop-filter: var(--tw-backdrop-blur, blur(8px));
+}
+/* Respect reduced-motion for Motion/GSAP driven elements we don't gate in JS */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

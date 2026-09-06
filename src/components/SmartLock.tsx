@@ -1,5 +1,7 @@
 "use client";
 
+import LazyVideo from "./LazyVideo";
+
 import { useRef, useState } from "react";
 import Reveal from "./Reveal";
 import AnimatedHeading from "./AnimatedHeading";
@@ -186,7 +188,7 @@ export default function SmartLock() {
                 <div
                   className="relative aspect-[9/16] h-[420px] max-h-[72vh] overflow-hidden rounded-[1.6rem] border border-white/10 shadow-2xl sm:h-[500px]"
                 >
-                  <video
+                  <LazyVideo
                     ref={videoRef}
                     src="/1.mp4"
                     autoPlay

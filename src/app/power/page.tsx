@@ -6,9 +6,9 @@ import FAQ from "@/components/worlds/shared/FAQ";
 import PowerHero from "@/components/worlds/power/PowerHero";
 import Ticker from "@/components/worlds/power/Ticker";
 import Range from "@/components/worlds/power/Range";
-import Runtime from "@/components/worlds/power/Runtime";
 import Technology from "@/components/worlds/power/Technology";
-import UseCases from "@/components/worlds/power/UseCases";
+import Defer from "@/components/Defer";
+import { LazyRuntime, LazyUseCases } from "@/components/lazy";
 import Assurance from "@/components/worlds/power/Assurance";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import { POWER_FAQ, POWER_PRODUCTS } from "@/data/power";
@@ -52,9 +52,9 @@ export default function PowerPage() {
         <PowerHero />
         <Ticker />
         <Range />
-        <Runtime />
+        <Defer id="runtime" minHeight="90vh"><LazyRuntime /></Defer>
         <Technology />
-        <UseCases />
+        <Defer id="use-cases" minHeight="80vh"><LazyUseCases /></Defer>
         <Assurance />
         <FAQ items={POWER_FAQ} heading="Straight answers on backup power" />
         <Contact

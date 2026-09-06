@@ -1,12 +1,14 @@
 "use client";
 
+import LazyVideo from "./LazyVideo";
+
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 
 const VIDEO =
   "https://whitelion-assets.blr1.cdn.digitaloceanspaces.com/website/home/bedroom_animation.mp4";
 const POSTER =
-  "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80";
+  "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=55";
 
 const SLIDES = [
   {
@@ -107,14 +109,13 @@ export default function FeatureReel() {
             key={s.label}
             className="relative aspect-[4/5] w-[88vw] shrink-0 snap-center overflow-hidden rounded-3xl bg-black sm:aspect-[16/9] lg:w-[min(1180px,90vw)]"
           >
-            <video
+            <LazyVideo
               src={VIDEO}
               poster={POSTER}
               muted
               loop
               autoPlay
               playsInline
-              preload="metadata"
               className="h-full w-full object-cover"
             />
             {/* legibility vignette */}

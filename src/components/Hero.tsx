@@ -26,10 +26,11 @@ const APPLIANCES = [
   { label: "Energy", Icon: EnergyIcon },
 ];
 
+/** CSS `rise` entrance (see globals.css): visible on first paint, animates
+ *  as soon as the stylesheet lands — no waiting for hydration. */
 const fade = (delay: number) => ({
-  initial: { opacity: 0, y: 26 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] as const },
+  className: "rise",
+  style: { "--d": `${delay}s` } as React.CSSProperties,
 });
 
 /** Headline words rise out of a mask one-by-one. */
@@ -43,22 +44,15 @@ function WordReveal({
   className?: string;
 }) {
   return (
-    <span className={className}>
+    <span>
       {words.split(" ").map((w, i) => (
-        <span key={i} className="inline-block overflow-hidden pb-1 align-top">
-          <motion.span
-            initial={{ y: "112%" }}
-            animate={{ y: 0 }}
-            transition={{
-              delay: baseDelay + i * 0.09,
-              duration: 0.75,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="inline-block"
-          >
+        <span key={i} className="mask-up align-top">
+          {/* Gradient classes go on the word itself: background-clip:text
+              cannot reach into the animated (composited) child boxes. */}
+          <span className={className} style={{ "--d": `${baseDelay + i * 0.09}s` } as React.CSSProperties}>
             {w}
             {" "}
-          </motion.span>
+          </span>
         </span>
       ))}
     </span>
@@ -109,18 +103,16 @@ function FloatCard({
   children: React.ReactNode;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 14 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
-      className={`pointer-events-none absolute z-20 ${className}`}
+    <div
+      style={{ "--d": "0.75s" } as React.CSSProperties}
+      className={`rise pointer-events-none absolute z-20 ${className}`}
     >
       <div className={`float-slow ${delay}`}>
         <div className="glass card-shadow rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3">
           {children}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -189,9 +181,9 @@ export default function Hero() {
       <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         {/* ───────────── copy ───────────── */}
         <div className="text-center lg:text-left">
-          <motion.span
-            {...fade(0)}
-            className="glass card-shadow inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[11px] font-medium text-text sm:text-xs"
+          <span
+            className="rise glass card-shadow inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[11px] font-medium text-text sm:text-xs"
+            style={{ "--d": "0s" } as React.CSSProperties}
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky opacity-70" />
@@ -200,7 +192,7 @@ export default function Hero() {
             Now shipping across India
             <span className="h-3 w-px bg-line" />
             <span className="font-semibold text-glow">7-year warranty</span>
-          </motion.span>
+          </span>
 
           <h1 className="font-display mt-5 text-[2.6rem] font-bold leading-[1.02] tracking-[-0.03em] text-text sm:mt-6 sm:text-6xl lg:text-[5.1rem]">
             <WordReveal words="Smart Homes That" baseDelay={0.12} />
@@ -212,18 +204,18 @@ export default function Hero() {
             />
           </h1>
 
-          <motion.p
-            {...fade(0.16)}
-            className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted sm:mt-7 sm:text-lg lg:mx-0"
+          <p
+            className="rise mx-auto mt-6 max-w-md text-base leading-relaxed text-muted sm:mt-7 sm:text-lg lg:mx-0"
+            style={{ "--d": "0.16s" } as React.CSSProperties}
           >
             Create a home that responds to the way you live. From lighting and
             climate to security and entertainment, Aaro Tec brings every smart
             experience together through beautifully integrated automation.
-          </motion.p>
+          </p>
 
-          <motion.div
-            {...fade(0.24)}
-            className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 lg:justify-start"
+          <div
+            className="rise mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 lg:justify-start"
+            style={{ "--d": "0.24s" } as React.CSSProperties}
           >
             <a
               href="#products"
@@ -254,11 +246,11 @@ export default function Hero() {
               </span>
               Book a Free Demo
             </a>
-          </motion.div>
+          </div>
 
-          <motion.div
-            {...fade(0.3)}
-            className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+          <div
+            className="rise mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+            style={{ "--d": "0.3s" } as React.CSSProperties}
           >
             <span className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
               Controls
@@ -304,11 +296,11 @@ export default function Hero() {
             >
               {APPLIANCES[activeCtrl].label} · live
             </motion.span>
-          </motion.div>
+          </div>
 
-          <motion.div
-            {...fade(0.42)}
-            className="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:justify-start"
+          <div
+            className="rise mt-10 flex flex-col items-center gap-5 sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:justify-start"
+            style={{ "--d": "0.42s" } as React.CSSProperties}
           >
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2.5">
@@ -363,7 +355,7 @@ export default function Hero() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* ───────────── premium product stage ───────────── */}
@@ -379,17 +371,15 @@ export default function Hero() {
           {/* transparent products float directly on the hero — no card, no
               box — and tilt in 3D toward the cursor */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{
               x: imgX,
               y: imgY,
               rotateX: tiltX,
               rotateY: tiltY,
               transformStyle: "preserve-3d",
-            }}
-            className="group relative h-full w-full"
+              "--d": "0.2s",
+            } as never}
+            className="rise group relative h-full w-full"
           >
             <Image
               src="/hero_bg.png"

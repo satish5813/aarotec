@@ -75,13 +75,10 @@ export default function Mosaic() {
           const on = i === featured;
           const p = FURNITURE_PRODUCTS.find((x) => x.slug === t.slug)!;
           return (
-            <motion.div
+            <div
               key={t.slug}
-              style={{ gridArea: t.area, transform: `translateZ(${t.z}px)`, transformStyle: "preserve-3d" }}
-              initial={{ opacity: 0, y: 40, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.25 + i * 0.08, ease: EASE }}
-              className="relative min-h-0"
+              style={{ gridArea: t.area, transform: `translateZ(${t.z}px)`, transformStyle: "preserve-3d", "--d": `${0.25 + i * 0.08}s` } as React.CSSProperties}
+              className="rise relative min-h-0"
             >
               <Link
                 href={`/furniture/${t.slug}`}
@@ -120,13 +117,13 @@ export default function Mosaic() {
                   )}
                 </AnimatePresence>
               </Link>
-            </motion.div>
+            </div>
           );
         })}
       </motion.div>
 
       {/* Now showing */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.8, ease: EASE }} className="mt-5 flex items-center justify-between gap-4">
+      <div className="rise mt-5 flex items-center justify-between gap-4" style={{ "--d": "1.2s" } as React.CSSProperties}>
         <div className="flex min-w-0 items-center gap-3">
           <span className="relative flex h-2 w-2 shrink-0">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-2 opacity-75" />
@@ -157,7 +154,7 @@ export default function Mosaic() {
             View piece →
           </Link>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

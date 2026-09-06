@@ -1,5 +1,7 @@
 "use client";
 
+import LazyVideo from "./LazyVideo";
+
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Reveal from "./Reveal";
@@ -172,12 +174,11 @@ export default function Scenes() {
       {/* ── Full-width interactive room stage ─────────────────── */}
       <div className="mx-auto w-[94vw] lg:w-[min(1240px,92vw)]">
         <div className="card-shadow relative h-[440px] overflow-hidden rounded-3xl border border-line bg-black sm:h-[540px] lg:h-[620px]">
-          <video
+          <LazyVideo
             ref={videoRef}
             src="/living-room.mp4"
             muted
             playsInline
-            preload="metadata"
             onTimeUpdate={onTimeUpdate}
             onEnded={onEnded}
             className="h-full w-full object-cover"

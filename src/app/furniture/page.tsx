@@ -4,10 +4,10 @@ import Footer from "@/components/Footer";
 import Contact from "@/components/worlds/shared/Contact";
 import FAQ from "@/components/worlds/shared/FAQ";
 import FurnitureHero from "@/components/worlds/furniture/FurnitureHero";
-import Collections from "@/components/worlds/furniture/Collections";
 import Pieces from "@/components/worlds/furniture/Pieces";
 import Craft from "@/components/worlds/furniture/Craft";
-import Rooms from "@/components/worlds/furniture/Rooms";
+import Defer from "@/components/Defer";
+import { LazyCollections, LazyRooms } from "@/components/lazy";
 import Reviews from "@/components/worlds/furniture/Reviews";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import { FURNITURE_FAQ, FURNITURE_PRODUCTS } from "@/data/furniture";
@@ -49,10 +49,10 @@ export default function FurniturePage() {
       <WorldNavbar world="furniture" />
       <main>
         <FurnitureHero />
-        <Collections />
+        <Defer id="collections" minHeight="120vh"><LazyCollections /></Defer>
         <Pieces />
         <Craft />
-        <Rooms />
+        <Defer minHeight="80vh"><LazyRooms /></Defer>
         <Reviews />
         <FAQ items={FURNITURE_FAQ} heading="Before you order" serif />
         <Contact

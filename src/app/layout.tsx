@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk, Fraunces, JetBrains_Mono } from "next/font/google";
+import { Inter, Space_Grotesk, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -24,14 +24,6 @@ const serif = Fraunces({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
-  display: "swap",
-});
-
-// Mono face for spec numbers on the Power and Furniture pages.
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -99,7 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${display.variable} ${serif.variable} ${mono.variable} antialiased`}
+      className={`${inter.variable} ${display.variable} ${serif.variable} antialiased`}
     >
       <body>
         <LocalBusinessJsonLd />

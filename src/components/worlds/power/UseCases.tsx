@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { EASE, Reveal, Words } from "@/components/worlds/shared/motion";
+import LazyVideo from "@/components/LazyVideo";
 
 const CASES = [
   {
@@ -45,17 +46,15 @@ export default function UseCases() {
     <section id="use-cases" ref={ref} className="relative isolate overflow-hidden bg-ink py-24 text-white sm:py-32">
       {/* Cinematic backdrop */}
       <motion.div style={{ y: videoY }} className="absolute inset-[-12%_0] -z-10">
-        <video
+        <LazyVideo
+          src="/power/hero.mp4"
           className="h-full w-full object-cover opacity-60"
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
           poster="/power/hero-poster.webp"
-        >
-          <source src="/power/hero.mp4" type="video/mp4" />
-        </video>
+        />
       </motion.div>
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-ink via-ink/60 to-ink" />
 

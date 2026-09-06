@@ -3,28 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
-import { EASE, Counter } from "@/components/worlds/shared/motion";
+import { Counter } from "@/components/worlds/shared/motion";
 
-const rise = (delay: number) => ({
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.9, delay, ease: EASE },
-});
-
+/** CSS-driven word reveal: visible on first paint, no hydration needed. */
 function Word({ children, delay }: { children: string; delay: number }) {
   return (
-    <span className="inline-block overflow-hidden pb-[0.1em] -mb-[0.1em] align-bottom">
-      <motion.span
-        className="inline-block"
-        initial={{ y: "110%" }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, delay, ease: EASE }}
-      >
-        {children}
-      </motion.span>
+    <span className="mask-up">
+      <span style={{ "--d": `${delay}s` } as React.CSSProperties}>{children}</span>
     </span>
   );
 }
+
+/** Style helper for the CSS `rise` entrance. */
+const riseAt = (delay: number) => ({ "--d": `${delay}s` } as React.CSSProperties);
 
 export default function PowerHero() {
   const ref = useRef<HTMLElement>(null);
@@ -87,13 +78,13 @@ export default function PowerHero() {
       <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-5 pb-16 sm:px-8 lg:min-h-[calc(100dvh-8rem)] lg:grid-cols-[1.05fr_1fr] lg:gap-6 lg:pb-24">
         {/* Copy */}
         <motion.div style={{ opacity: copyOpacity, y: copyY }} className="relative z-10">
-          <motion.p {...rise(0.1)} className="label flex items-center gap-3 text-hi">
+          <p className="rise label flex items-center gap-3 text-hi" style={riseAt(0.1)}>
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-2 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-hi" />
             </span>
             Portable power stations · Hyderabad &amp; pan-India
-          </motion.p>
+          </p>
 
           <h1 className="font-display mt-6 text-[2.9rem] font-extrabold leading-[0.98] tracking-[-0.04em] sm:text-6xl lg:text-[5.4rem]">
             <Word delay={0.2}>The</Word> <Word delay={0.27}>power</Word> <Word delay={0.34}>cut</Word>
@@ -101,11 +92,11 @@ export default function PowerHero() {
             <span className="volt"><Word delay={0.45}>ends</Word> <Word delay={0.52}>here.</Word></span>
           </h1>
 
-          <motion.p {...rise(0.7)} className="mt-7 max-w-lg text-lg leading-relaxed text-muted">
+          <p className="rise mt-7 max-w-lg text-lg leading-relaxed text-muted" style={riseAt(0.7)}>
             Silent, fume-free battery backup that lives on a shelf, recharges from any socket in about an hour and takes over in under ten milliseconds. No wiring, no installer, no generator.
-          </motion.p>
+          </p>
 
-          <motion.div {...rise(0.85)} className="mt-9 flex flex-wrap items-center gap-3">
+          <div className="rise mt-9 flex flex-wrap items-center gap-3" style={riseAt(0.85)}>
             <a href="#range" className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-accent-fg shadow-[0_18px_40px_-18px_rgba(15,21,18,0.7)] transition-transform hover:-translate-y-0.5">
               Explore the range
               <svg viewBox="0 0 24 24" className="h-4 w-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
@@ -113,9 +104,9 @@ export default function PowerHero() {
             <a href="#runtime" className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/70 px-6 py-3.5 text-sm font-semibold backdrop-blur transition-colors hover:border-text">
               How long will it run?
             </a>
-          </motion.div>
+          </div>
 
-          <motion.dl {...rise(1)} className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-line pt-6">
+          <dl className="rise mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-line pt-6" style={riseAt(1)}>
             {[
               { v: 56, s: " min", l: "to a full charge" },
               { v: 4000, s: "+", l: "charge cycles" },
@@ -128,7 +119,7 @@ export default function PowerHero() {
                 <dd className="mt-1 text-xs text-muted">{s.l}</dd>
               </div>
             ))}
-          </motion.dl>
+          </dl>
         </motion.div>
 
         {/* Stage. The product is a white-background photo blended with
@@ -138,11 +129,8 @@ export default function PowerHero() {
         <div className="relative mx-auto w-full max-w-[560px] lg:max-w-none">
           <motion.div style={{ y: prodY }} className="cutout relative aspect-square">
             <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 40 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1.2, delay: 0.35, ease: EASE }}
               style={{ x: px, y: py, rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
-              className="absolute inset-0"
+              className="rise absolute inset-0"
             >
               <Image
                 src="/power/delta-3-1.webp"
@@ -157,15 +145,15 @@ export default function PowerHero() {
 
           {/* Floating chips */}
           <motion.div style={{ x: chipX, y: chipY }} className="pointer-events-none absolute inset-0">
-            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 0.7, ease: EASE }} className="float absolute left-[2%] top-[14%] rounded-2xl border border-line bg-panel/85 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur">
+            <div style={riseAt(1.1)} className="rise float absolute left-[2%] top-[14%] rounded-2xl border border-line bg-panel/85 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur">
               <p className="label text-muted">Output</p>
               <p className="font-mono mt-1 text-xl font-medium">1,800 W</p>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25, duration: 0.7, ease: EASE }} className="float absolute right-[0%] top-[30%] rounded-2xl border border-line bg-panel/85 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur [animation-delay:-2s]">
+            </div>
+            <div style={riseAt(1.25)} className="rise float absolute right-[0%] top-[30%] rounded-2xl border border-line bg-panel/85 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur [animation-delay:-2s]">
               <p className="label text-muted">Noise</p>
               <p className="font-mono mt-1 text-xl font-medium">30 dB</p>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4, duration: 0.7, ease: EASE }} className="float absolute bottom-[8%] left-[8%] w-56 rounded-2xl border border-line bg-panel/90 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur [animation-delay:-4s]">
+            </div>
+            <div style={riseAt(1.4)} className="rise float absolute bottom-[8%] left-[8%] w-56 rounded-2xl border border-line bg-panel/90 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur [animation-delay:-4s]">
               <div className="flex items-center justify-between">
                 <p className="label text-muted">Charging</p>
                 <p className="font-mono text-sm font-medium">{pct}%</p>
@@ -174,7 +162,7 @@ export default function PowerHero() {
                 <div className="h-full rounded-full bg-accent-2 transition-[width] duration-200" style={{ width: `${pct}%` }} />
               </div>
               <p className="mt-1.5 text-[11px] text-muted">{pct >= 100 ? "Ready for the next outage" : "X-Stream fast charge"}</p>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>

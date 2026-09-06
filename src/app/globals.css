@@ -445,12 +445,12 @@ html.lenis body {
   --color-accent-fg: var(--accent-fg);
   --color-accent-2: var(--accent-2);
   --color-hi: var(--hi);
-  --font-mono: var(--font-mono);
 }
 
-/* Spec numbers use a mono face; everything else is the site's own type. */
+/* Spec numbers use the system mono stack — no extra font download. */
 .font-mono {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-variant-numeric: tabular-nums;
 }
 [data-world] .label {
   letter-spacing: 0.22em;
@@ -568,5 +568,50 @@ html {
   *::before,
   *::after {
     scroll-behavior: auto !important;
+  }
+}
+
+/* ─── CSS-only entrance animations ───────────────────────────────────
+   Hero copy uses these instead of JS-driven variants so it is visible on
+   first paint and animates as soon as the stylesheet lands — no waiting
+   for hydration. Delay per element via --d. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0s);
+}
+@keyframes mask-up {
+  from {
+    transform: translateY(112%);
+  }
+  to {
+    transform: none;
+  }
+}
+.mask-up {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+  vertical-align: bottom;
+}
+.mask-up > span {
+  display: inline-block;
+  animation: mask-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .mask-up > span {
+    animation: none;
   }
 }

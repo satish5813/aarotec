@@ -49,5 +49,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local asset archives
+# local asset archives and photography masters. These are the originals we
+# re-encode web assets from; they must never be served or deployed.
 public/*.zip
+/assets-source

@@ -56,7 +56,7 @@ export default function FurnitureHero() {
           <a
             href="#craft"
             style={riseAt(0.95)}
-            className="rise group mt-8 inline-flex items-center gap-4 rounded-full border border-line bg-panel/70 py-2 pl-2 pr-4 backdrop-blur transition-colors hover:border-text"
+            className="rise group mt-8 inline-flex items-center gap-4 rounded-full border border-line bg-panel/90 py-2 pl-2 pr-4 transition-colors hover:border-text"
           >
             <span className="flex -space-x-1.5">
               {FINISHES.map((f) => (
@@ -72,7 +72,7 @@ export default function FurnitureHero() {
               The collections
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
             </a>
-            <a href="#pieces" className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/70 px-6 py-3.5 text-sm font-semibold backdrop-blur transition-colors hover:border-text">
+            <a href="#pieces" className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/90 px-6 py-3.5 text-sm font-semibold transition-colors hover:border-text">
               All 22 pieces
             </a>
           </div>

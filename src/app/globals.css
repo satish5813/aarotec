@@ -199,6 +199,18 @@ html.lenis body {
   -webkit-backdrop-filter: blur(22px) saturate(160%);
 }
 
+/* Same panel, no backdrop-filter. Above-the-fold chrome uses this: a live
+   backdrop blur forces the compositor to re-rasterise everything behind the
+   element on every frame, which on a Retina MacBook is roughly 4x the pixel
+   work of a 1080p screen and visibly stalls the hero's entrance. The hero
+   sits on a flat gradient, so blurring what is behind it buys nothing. */
+.glass-flat {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 18px 48px -28px rgba(30, 41, 99, 0.28);
+}
+
 /* Soft, dimensional elevation tuned for a light canvas */
 .card-shadow {
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset,
@@ -322,8 +334,28 @@ html.lenis body {
     transform: translate3d(4%, -6%, 0) scale(1.12);
   }
 }
+/* Ambient colour blooms. These used to be solid circles under a
+   `blur(130px)` filter; a filter that large is re-rasterised every frame of
+   the drift animation and was the single most expensive thing in the hero on
+   Safari. A radial gradient paints the identical shape for free. */
 .orb {
+  border-radius: 9999px;
   animation: orb-drift 16s ease-in-out infinite;
+}
+.orb-blue {
+  background: radial-gradient(closest-side, rgba(91, 124, 250, 0.3), transparent 100%);
+}
+.orb-violet {
+  background: radial-gradient(closest-side, rgba(168, 85, 247, 0.28), transparent 100%);
+}
+.orb-sky {
+  background: radial-gradient(closest-side, rgba(34, 211, 238, 0.2), transparent 100%);
+}
+
+/* Ambient brand bloom for section backdrops — same trick as .orb. */
+.bloom-blue {
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgba(47, 107, 255, 0.16), transparent 100%);
 }
 
 @keyframes scroll-dot {

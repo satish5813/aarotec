@@ -15,7 +15,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
   return (
     <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[60vmin] w-[80vmin] -translate-x-1/2 rounded-full bg-[#2f6bff]/12 blur-[140px]" />
+      <div className="pointer-events-none bloom-blue absolute left-1/2 top-[-10vmin] -z-10 h-[90vmin] w-[110vmin] -translate-x-1/2" />
 
       {/* breadcrumb */}
       <div className="mx-auto max-w-7xl px-6 pt-28">
@@ -48,7 +48,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 src={product.variants[v].src}
                 alt={`${product.name} smart device`}
                 fill
-                priority
+                preload
                 sizes="(max-width:1024px) 90vw, 600px"
                 className="object-contain drop-shadow-[0_28px_45px_rgba(14,17,23,0.22)]"
               />

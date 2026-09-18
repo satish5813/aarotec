@@ -12,19 +12,24 @@ const inter = Inter({
   display: "swap",
 });
 
+// Both are variable fonts. Naming explicit weights made next/font ship a
+// separate static file per weight and style — nine files for these two
+// families, all fetched before the hero could paint. The variable versions
+// cover the same range in one file each.
 const display = Space_Grotesk({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
   display: "swap",
 });
 
 const serif = Fraunces({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   display: "swap",
+  // Only used below the fold, so it must not compete with the hero for
+  // bandwidth on first load.
+  preload: false,
 });
 
 const TITLE = `${BUSINESS.name} — ${BUSINESS.tagline}`;

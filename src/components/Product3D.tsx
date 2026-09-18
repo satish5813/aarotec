@@ -152,7 +152,7 @@ export default function Product3D() {
       id="explore-3d"
       className="relative overflow-hidden border-y border-line bg-bg-soft py-28"
     >
-      <div className="pointer-events-none absolute left-1/2 top-1/3 -z-10 h-[60vmin] w-[60vmin] -translate-x-1/2 rounded-full bg-[#2f6bff]/12 blur-[130px]" />
+      <div className="pointer-events-none bloom-blue absolute left-1/2 top-[22%] -z-10 h-[90vmin] w-[90vmin] -translate-x-1/2" />
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">

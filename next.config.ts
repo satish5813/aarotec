@@ -59,12 +59,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/(.*)", headers: securityHeaders },
-      { source: "/power/:path*.(webp|png|jpg|mp4)", headers: [IMMUTABLE] },
-      { source: "/furniture/:path*.(webp|png|jpg)", headers: [IMMUTABLE] },
-      { source: "/products/:path*.(webp|png|jpg)", headers: [IMMUTABLE] },
-      { source: "/gallery/:path*.(webp|png|jpg)", headers: [IMMUTABLE] },
-      { source: "/clients/:path*.(webp|png|jpg)", headers: [IMMUTABLE] },
-      { source: "/:file*.(mp4|png|jpeg|jpg|webp)", headers: [IMMUTABLE] },
+      { source: "/power/:path*.(webp|avif|png|jpg|mp4)", headers: [IMMUTABLE] },
+      { source: "/furniture/:path*.(webp|avif|png|jpg)", headers: [IMMUTABLE] },
+      { source: "/products/:path*.(webp|avif|png|jpg)", headers: [IMMUTABLE] },
+      { source: "/gallery/:path*.(webp|avif|png|jpg)", headers: [IMMUTABLE] },
+      { source: "/clients/:path*.(webp|avif|png|jpg)", headers: [IMMUTABLE] },
+      { source: "/:file*.(mp4|png|jpeg|jpg|webp|avif)", headers: [IMMUTABLE] },
     ];
   },
 };

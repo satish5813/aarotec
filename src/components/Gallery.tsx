@@ -191,7 +191,7 @@ export default function Gallery() {
                   src={shot.src}
                   alt={shot.caption}
                   fill
-                  priority={false}
+                  preload={false}
                   sizes="100vw"
                   className="object-cover"
                 />

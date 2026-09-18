@@ -101,7 +101,7 @@ export default function PowerHero() {
               Explore the range
               <svg viewBox="0 0 24 24" className="h-4 w-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
             </a>
-            <a href="#runtime" className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/70 px-6 py-3.5 text-sm font-semibold backdrop-blur transition-colors hover:border-text">
+            <a href="#runtime" className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/90 px-6 py-3.5 text-sm font-semibold transition-colors hover:border-text">
               How long will it run?
             </a>
           </div>
@@ -145,15 +145,15 @@ export default function PowerHero() {
 
           {/* Floating chips */}
           <motion.div style={{ x: chipX, y: chipY }} className="pointer-events-none absolute inset-0">
-            <div style={riseAt(1.1)} className="rise float absolute left-[2%] top-[14%] rounded-2xl border border-line bg-panel/85 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur">
+            <div style={riseAt(1.1)} className="rise float absolute left-[2%] top-[14%] rounded-2xl border border-line bg-panel/95 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)]">
               <p className="label text-muted">Output</p>
               <p className="font-mono mt-1 text-xl font-medium">1,800 W</p>
             </div>
-            <div style={riseAt(1.25)} className="rise float absolute right-[0%] top-[30%] rounded-2xl border border-line bg-panel/85 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur [animation-delay:-2s]">
+            <div style={riseAt(1.25)} className="rise float absolute right-[0%] top-[30%] rounded-2xl border border-line bg-panel/95 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] [animation-delay:-2s]">
               <p className="label text-muted">Noise</p>
               <p className="font-mono mt-1 text-xl font-medium">30 dB</p>
             </div>
-            <div style={riseAt(1.4)} className="rise float absolute bottom-[8%] left-[8%] w-56 rounded-2xl border border-line bg-panel/90 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] backdrop-blur [animation-delay:-4s]">
+            <div style={riseAt(1.4)} className="rise float absolute bottom-[8%] left-[8%] w-56 rounded-2xl border border-line bg-panel/95 px-4 py-3 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] [animation-delay:-4s]">
               <div className="flex items-center justify-between">
                 <p className="label text-muted">Charging</p>
                 <p className="font-mono text-sm font-medium">{pct}%</p>

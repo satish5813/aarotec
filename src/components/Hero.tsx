@@ -7,7 +7,6 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import Image from "next/image";
 import {
   LightsIcon,
   ClimateIcon,
@@ -17,6 +16,9 @@ import {
   FanIcon,
 } from "./icons";
 
+/** Matches the stage's grid column so the browser picks the right candidate. */
+const SIZES = "(max-width: 1024px) 92vw, 50vw";
+
 const APPLIANCES = [
   { label: "Lights", Icon: LightsIcon },
   { label: "Climate", Icon: ClimateIcon },
@@ -25,13 +27,6 @@ const APPLIANCES = [
   { label: "Security", Icon: SecurityIcon },
   { label: "Energy", Icon: EnergyIcon },
 ];
-
-/** CSS `rise` entrance (see globals.css): visible on first paint, animates
- *  as soon as the stylesheet lands — no waiting for hydration. */
-const fade = (delay: number) => ({
-  className: "rise",
-  style: { "--d": `${delay}s` } as React.CSSProperties,
-});
 
 /** Headline words rise out of a mask one-by-one. */
 function WordReveal({
@@ -108,7 +103,7 @@ function FloatCard({
       className={`rise pointer-events-none absolute z-20 ${className}`}
     >
       <div className={`float-slow ${delay}`}>
-        <div className="glass card-shadow rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3">
+        <div className="glass-flat card-shadow rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3">
           {children}
         </div>
       </div>
@@ -173,16 +168,16 @@ export default function Hero() {
         style={{ x: orbX, y: orbY }}
         className="pointer-events-none absolute inset-0 -z-20 overflow-hidden"
       >
-        <div className="orb absolute -left-24 top-10 h-[380px] w-[380px] rounded-full bg-blue/25 blur-[130px] sm:h-[460px] sm:w-[460px]" />
-        <div className="orb absolute right-[-12%] top-[26%] h-[400px] w-[400px] rounded-full bg-violet/25 blur-[140px] sm:h-[480px] sm:w-[480px]" />
-        <div className="orb absolute bottom-[-10%] left-1/3 h-[320px] w-[320px] rounded-full bg-sky/15 blur-[130px]" />
+        <div className="orb orb-blue absolute -left-52 top-[-4rem] h-[640px] w-[640px] sm:h-[720px] sm:w-[720px]" />
+        <div className="orb orb-violet absolute right-[-22%] top-[10%] h-[660px] w-[660px] sm:h-[740px] sm:w-[740px]" />
+        <div className="orb orb-sky absolute bottom-[-24%] left-[22%] h-[580px] w-[580px]" />
       </motion.div>
 
       <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         {/* ───────────── copy ───────────── */}
         <div className="text-center lg:text-left">
           <span
-            className="rise glass card-shadow inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[11px] font-medium text-text sm:text-xs"
+            className="rise glass-flat card-shadow inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[11px] font-medium text-text sm:text-xs"
             style={{ "--d": "0s" } as React.CSSProperties}
           >
             <span className="relative flex h-2 w-2">
@@ -232,7 +227,7 @@ export default function Hero() {
             </a>
             <a
               href="#contact"
-              className="glass card-shadow group inline-flex w-full items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-sm font-semibold text-text transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
+              className="glass-flat card-shadow group inline-flex w-full items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-sm font-semibold text-text transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
             >
               <span className="grid h-7 w-7 place-items-center rounded-full btn-grad text-white">
                 <svg
@@ -273,7 +268,7 @@ export default function Hero() {
                     className={`relative grid h-9 w-9 place-items-center rounded-xl transition-all duration-300 ${
                       on
                         ? "btn-grad scale-110 text-white shadow-[0_10px_24px_-8px_rgba(124,95,247,0.7)]"
-                        : "glass text-muted hover:-translate-y-0.5 hover:text-text"
+                        : "glass-flat text-muted hover:-translate-y-0.5 hover:text-text"
                     }`}
                   >
                     {on && (
@@ -364,7 +359,7 @@ export default function Hero() {
           style={{ perspective: "1200px" }}
         >
           {/* ambient brand glow behind the devices */}
-          <div className="glow-ring glow-pulse pointer-events-none absolute left-1/2 top-1/2 -z-20 h-[78%] w-[84%] rounded-full opacity-55 blur-[48px]" />
+          <div className="glow-ring glow-pulse pointer-events-none absolute left-1/2 top-1/2 -z-20 h-[78%] w-[84%] rounded-full opacity-55" />
           {/* soft ground shadow so the devices feel placed, not pasted */}
           <div className="pointer-events-none absolute bottom-[15%] left-1/2 -z-10 h-9 w-[62%] -translate-x-1/2 rounded-[50%] bg-ink/25 blur-2xl" />
 
@@ -381,14 +376,32 @@ export default function Hero() {
             } as never}
             className="rise group relative h-full w-full"
           >
-            <Image
-              src="/hero_bg.png"
-              alt="Aaro Tec smart-home product family — touch panels, hub, smart lock, sensors and the companion app"
-              fill
-              priority
-              sizes="(max-width: 1024px) 92vw, 50vw"
-              className="object-contain object-center drop-shadow-[0_26px_36px_rgba(15,23,42,0.22)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-            />
+            {/* Pre-encoded at 1400px (AVIF 51 KB / WebP 261 KB) and served as
+                static files. The 2.4 MB transparent PNG this replaced went
+                through the image optimiser on every cold request, and an
+                alpha PNG is the slowest thing to encode as AVIF — which is
+                exactly the format Safari asks for, so Macs waited longest. */}
+            <picture>
+              <source
+                type="image/avif"
+                srcSet="/hero_bg-768.avif 768w, /hero_bg-1536.avif 1536w"
+                sizes={SIZES}
+              />
+              <source
+                type="image/webp"
+                srcSet="/hero_bg-768.webp 768w, /hero_bg-1536.webp 1536w"
+                sizes={SIZES}
+              />
+              <img
+                src="/hero_bg-1536.webp"
+                alt="Aaro Tec smart-home product family — touch panels, hub, smart lock, sensors and the companion app"
+                width={1536}
+                height={1024}
+                fetchPriority="high"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_18px_20px_rgba(15,23,42,0.18)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              />
+            </picture>
           </motion.div>
 
           {/* floating live widget cards — tucked into the empty bands,

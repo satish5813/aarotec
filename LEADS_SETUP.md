@@ -11,10 +11,8 @@ Sheet via a Google Apps Script Web App. Follow these steps once.
    | Timestamp | Name | Email | Phone | City | Interest | Product | Message | Source |
    |-----------|------|-------|-------|------|----------|---------|---------|--------|
 
-   *Interest* is `smart-home` for the main site form, and `power`, `furniture`
-   or `both` for enquiries from the Power Backup and Furniture pages. *Product*
-   and *Message* are filled by those pages when a visitor enquires about a
-   specific piece or unit.
+   *Interest* is always `smart-home` for the website form. *Product* and
+   *Message* are optional and stay empty unless a form sends them.
 
 ## 2. Add the Apps Script
 

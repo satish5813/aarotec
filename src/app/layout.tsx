@@ -49,9 +49,6 @@ export const metadata: Metadata = {
     "home automation",
     "smart switches India",
     "Aaro Tec",
-    "portable power station",
-    "home power backup",
-    "solid wood furniture",
   ],
   alternates: {
     canonical: "/",

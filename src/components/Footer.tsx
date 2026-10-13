@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/products";
-import { WORLDS } from "@/lib/site";
 
 // Products shown in the footer, in this order. Names come from the product
 // data so a rename can never leave the footer out of step.
@@ -18,15 +17,6 @@ const productLinks: FooterLink[] = FOOTER_PRODUCTS.flatMap((slug) => {
 // removed rather than stubbed out — an empty page is worse than no link.
 const COLS: { h: string; links: FooterLink[] }[] = [
   { h: "Smart home", links: productLinks },
-  {
-    h: "Also from Aaro Tec",
-    links: [
-      { label: WORLDS.power.label, href: WORLDS.power.href },
-      { label: "RIVER & DELTA range", href: `${WORLDS.power.href}#range` },
-      { label: WORLDS.furniture.label, href: WORLDS.furniture.href },
-      { label: "Furniture collections", href: `${WORLDS.furniture.href}#collections` },
-    ],
-  },
   {
     h: "Company",
     links: [

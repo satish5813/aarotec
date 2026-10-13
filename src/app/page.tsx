@@ -15,7 +15,6 @@ import {
 import Ecosystem from "@/components/Ecosystem";
 import Stats from "@/components/Stats";
 import Why from "@/components/Why";
-import MoreFromAaroTec from "@/components/MoreFromAaroTec";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
@@ -38,7 +37,6 @@ export default function Home() {
       <Stats />
       <Why />
       <Defer id="gallery" minHeight="90vh"><LazyGallery /></Defer>
-      <MoreFromAaroTec />
       <Testimonials />
       <FAQ />
       <Contact />

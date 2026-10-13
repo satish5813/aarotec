@@ -13,7 +13,7 @@ type LeadPayload = {
   email?: string;
   phone?: string;
   city?: string;
-  // Sent by the Power / Furniture enquiry forms
+  // Optional context a form may send alongside the lead
   interest?: string;
   product?: string;
   message?: string;
@@ -21,7 +21,7 @@ type LeadPayload = {
   company?: string;
 };
 
-const INTERESTS = new Set(["smart-home", "power", "furniture", "both"]);
+const INTERESTS = new Set(["smart-home"]);
 
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
@@ -47,11 +47,7 @@ export async function POST(request: NextRequest) {
   const product = (body.product || "").trim().slice(0, 120);
   const message = (body.message || "").trim().slice(0, 2000);
 
-  // The smart-home form collects email; the Power/Furniture forms make it
-  // optional because a phone number is what actually gets the callback.
-  const emailRequired = interest === "smart-home";
-
-  if (!name || !phone || !city || (emailRequired && !email)) {
+  if (!name || !phone || !city || !email) {
     return Response.json(
       { ok: false, error: "Please fill in all fields." },
       { status: 400 }

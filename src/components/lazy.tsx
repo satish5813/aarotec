@@ -16,9 +16,3 @@ export const LazySmartLock = dynamic(() => import("./SmartLock"), { ssr: false, 
 export const LazyScenes = dynamic(() => import("./Scenes"), { ssr: false, loading: skeleton("90vh") });
 export const LazyAppShowcase = dynamic(() => import("./AppShowcase"), { ssr: false, loading: skeleton("70vh") });
 export const LazyGallery = dynamic(() => import("./Gallery"), { ssr: false, loading: skeleton("90vh") });
-
-export const LazyRuntime = dynamic(() => import("./worlds/power/Runtime"), { ssr: false, loading: skeleton("90vh") });
-export const LazyUseCases = dynamic(() => import("./worlds/power/UseCases"), { ssr: false, loading: skeleton("80vh") });
-
-export const LazyCollections = dynamic(() => import("./worlds/furniture/Collections"), { ssr: false, loading: skeleton("120vh") });
-export const LazyRooms = dynamic(() => import("./worlds/furniture/Rooms"), { ssr: false, loading: skeleton("80vh") });

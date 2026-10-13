@@ -17,12 +17,11 @@ export type Lead = {
   city: string;
   source: string;
   userAgent: string;
-  /** Which offering the enquiry is about: smart-home (default), power,
-   *  furniture or both. */
+  /** Which offering the enquiry is about; smart-home for the website form. */
   interest: string;
   /** Specific product the visitor was looking at, if any. */
   product: string;
-  /** Free-text message from the Power/Furniture enquiry forms. */
+  /** Optional free-text message sent with the enquiry. */
   message: string;
   createdAt: string; // ISO 8601
 };
@@ -50,7 +49,7 @@ export function db(): Database.Database {
     );
     CREATE INDEX IF NOT EXISTS idx_leads_createdAt ON leads (createdAt DESC);
   `);
-  // Columns added for the Power / Furniture enquiry forms. SQLite has no
+  // Optional enquiry columns added after the first release. SQLite has no
   // ADD COLUMN IF NOT EXISTS, so check the existing schema first.
   const cols = new Set(
     (database.prepare(`PRAGMA table_info(leads)`).all() as { name: string }[]).map((c) => c.name)

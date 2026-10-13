@@ -71,7 +71,7 @@ export default function Footer() {
               src="/aaro-lockup.png"
               alt="Aaro Tec — Smart Homes That Feel Effortless"
               width={785}
-              height={561}
+              height={615}
               className="footer-lockup h-auto w-44"
             />
             <p className="mt-4 max-w-xs text-sm text-muted">

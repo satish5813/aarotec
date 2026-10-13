@@ -1,9 +1,10 @@
 import Image from "next/image";
 
 /**
- * Aaro Tec brand mark — the glowing house logo (cropped, with transparent
- * background, from the full lockup in /public/newaarotec.jpeg). Used in the
- * navbar and footer alongside the "Aaro Tec" wordmark.
+ * Aaro Tec brand mark — the gradient roof with the hanging power switch
+ * (cropped, with transparent background, from the full lockup in
+ * /public/newaarotec.jpeg). Used in the navbar alongside the "Aaro Tec"
+ * wordmark; the footer shows the full lockup.
  */
 export default function LogoMark({
   className = "h-9 w-9",

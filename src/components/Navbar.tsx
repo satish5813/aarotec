@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import LogoMark from "./Logo";
 import { selectProduct } from "./productStore";
 
@@ -82,16 +83,24 @@ export default function Navbar() {
           className="group flex items-center gap-2.5"
         >
           <LogoMark className="h-10 w-10 transition-transform duration-300 group-hover:scale-105" />
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-xl font-bold tracking-[-0.02em] text-text">
-              Aaro{" "}
-              <span className="text-glow transition-all duration-500 group-hover:[filter:brightness(1.15)]">
-                Tec
-              </span>
-            </span>
-            <span className="text-shimmer mt-1 hidden whitespace-nowrap text-[10px] font-semibold tracking-tight min-[380px]:block">
-              Transforming spaces &amp; enhancing lives
-            </span>
+          {/* The wordmark and tagline are the logo's own lettering, not a web
+              font, so the brand reads exactly as designed. */}
+          <span className="flex flex-col gap-1.5">
+            <Image
+              src="/aaro-wordmark.png"
+              alt="Aaro Tec"
+              width={785}
+              height={124}
+              priority
+              className="h-6 w-auto transition-all duration-500 group-hover:[filter:brightness(1.15)]"
+            />
+            <Image
+              src="/aaro-tagline.png"
+              alt="Smart spaces, brighter tomorrow"
+              width={640}
+              height={48}
+              className="hidden h-[9px] w-auto min-[380px]:block"
+            />
           </span>
         </Link>
 
